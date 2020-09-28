@@ -141,6 +141,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                             renderZeroBezelNotification(this, extras)
                         }
                         else -> {
+                            Log.d(TAG, "onMessageReceived: in else part")
                             sendNotification(extras)
                         }
                     }
@@ -154,7 +155,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun sendNotification(extras: Bundle) {
         try {
-
+            Log.d(TAG, "onMessageReceived: in else part 2")
             var messageBody = extras.getString("pt_msg")
             var image = getBitmapfromUrl(extras.getString("pt_big_img"))
             var link = extras.getString("link")
@@ -184,6 +185,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
             )
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            Log.d(TAG, "onMessageReceived: in else part 3")
+            Log.d(TAG, "sendNotification: "+title+messageBody)
             val notificationBuilder: NotificationCompat.Builder =
                 NotificationCompat.Builder(applicationContext)
                     .setLargeIcon(image) /*Notification icon image*/
