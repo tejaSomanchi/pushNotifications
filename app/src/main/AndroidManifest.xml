@@ -16,6 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+        android:name="com.appyhigh.pushNotifications.MyFirebaseMessagingService"
+        android:exported="false">
+        <intent-filter>
+            <action android:name="com.google.firebase.MESSAGING_EVENT" />
+        </intent-filter>
+        </service>
+        <receiver
+            android:name="com.appyhigh.pushNotifications.PushTemplateReceiver"
+            android:exported="false"
+            android:enabled="true">
+        </receiver>
     </application>
 
 </manifest>
