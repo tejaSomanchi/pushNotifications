@@ -491,7 +491,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    fun checkForNotifications(context: Context, intent: Intent, webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam1: String, intentParam2: String, intentParam3: String) {
+    fun checkForNotifications(
+        context: Context,
+        intent: Intent,
+        webViewActivityToOpen: Class<out Activity?>?,
+        activityToOpen: Class<out Activity?>?,
+        intentParam1: String,
+        intentParam2: String,
+        intentParam3: String
+    ) {
         try {
             val rating: Int = intent.getIntExtra("rating", 0)
             Log.i("Result", "Got the data " + intent.getIntExtra("rating", 0))
@@ -503,10 +511,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         if (task.isSuccessful) {
                             // We can get the ReviewInfo object
                             val reviewInfo = task.result
+                            val myActivity: Activity = context as Activity
                             if(activityToOpen!=null) {
                                 //check for null
                                 val flow = manager.launchReviewFlow(
-                                    activityToOpen?.newInstance()!!,
+                                    myActivity,
                                     reviewInfo
                                 )
                                 flow.addOnCompleteListener { taask: Task<Void?>? ->
