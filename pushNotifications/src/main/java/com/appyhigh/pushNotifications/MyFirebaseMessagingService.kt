@@ -43,7 +43,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private var contentViewSmall: RemoteViews? = null
     private var contentViewRating: RemoteViews? = null
     private var contentViewBig: RemoteViews? = null
-    private val smallIcon = 0
     private var pt_dot = 0
     private var meta_clr: String? = null
     private var small_icon_clr: String? = null
