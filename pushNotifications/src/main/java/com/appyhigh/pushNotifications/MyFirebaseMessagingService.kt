@@ -491,6 +491,106 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
+    fun checkForNotifications(context: Context, intent: Intent, webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam1: String, intentParam2: String, intentParam3: String) {
+        try {
+            val rating: Int = intent.getIntExtra("rating", 0)
+            Log.i("Result", "Got the data " + intent.getIntExtra("rating", 0))
+            if (intent.hasExtra("rating")) {
+                if (rating == 5) {
+                    val manager = ReviewManagerFactory.create(context)
+                    val request = manager.requestReviewFlow()
+                    request.addOnCompleteListener { task: Task<ReviewInfo?> ->
+                        if (task.isSuccessful) {
+                            // We can get the ReviewInfo object
+                            val reviewInfo = task.result
+                            if(activityToOpen!=null) {
+                                //check for null
+                                val flow = manager.launchReviewFlow(
+                                    activityToOpen?.newInstance()!!,
+                                    reviewInfo
+                                )
+                                flow.addOnCompleteListener { taask: Task<Void?>? ->
+                                    Log.d("main", "inAppreview: completed")
+                                }
+                            }
+                        } else {
+                            // There was some problem, continue regardless of the result.
+                            Log.d("inAppreview", "checkForNotis: failed")
+                        }
+                    }
+                } else if (rating > 0) {
+                    Toast.makeText(context, "Thanks for your feedback :)", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
+            if (intent.hasExtra("which")) {
+                val which = intent.getStringExtra("which")
+                val url = intent.getStringExtra("link")
+                val title = intent.getStringExtra("title")
+
+                when (which) {
+                    "B" -> {
+                        try {
+                            val intent1 = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            context.startActivity(intent1)
+                        } catch (e: ActivityNotFoundException) {
+                            Toast.makeText(
+                                context,
+                                "Unable to open the link",
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                        }
+                    }
+                    "P" -> {
+                        try {
+                            val intent1 = Intent(
+                                Intent.ACTION_VIEW, Uri.parse(
+                                    "market://details?id=$url"
+                                )
+                            )
+                            context.startActivity(intent1)
+                        } catch (e: ActivityNotFoundException) {
+                            e.printStackTrace()
+                            val intent1 = Intent(
+                                Intent.ACTION_VIEW, Uri.parse(
+                                    "https://play.google.com/store/apps/details?id=$url"
+                                )
+                            )
+                            context.startActivity(intent1)
+                        }
+                    }
+                    "L" -> {
+                        try {
+                            val intent1 = Intent(context, webViewActivityToOpen)
+                            intent1.putExtra("link", url)
+                            intent1.putExtra("title", title)
+                            context.startActivity(intent1)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    "D" -> {
+                        try {
+                            val intent1 = Intent(context, activityToOpen)
+                            intent1.putExtra(intentParam1, url)
+                            context.startActivity(intent1)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    else -> {
+                        Log.d(TAG, "No event fired")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "checkForNotifications: \$e")
+//                Dont push
+        }
+    }
+
 
 
     private fun setPendingIntent(context: Context, extras: Bundle, launchIntent: Intent): PendingIntent {
@@ -660,105 +760,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     companion object {
         private const val TAG = "FirebaseMessageService"
-        fun checkForNotifications(context: Context, intent: Intent, webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam: String) {
-            try {
-                val rating: Int = intent.getIntExtra("rating", 0)
-                Log.i("Result", "Got the data " + intent.getIntExtra("rating", 0))
-                if (intent.hasExtra("rating")) {
-                    if (rating == 5) {
-                        val manager = ReviewManagerFactory.create(context)
-                        val request = manager.requestReviewFlow()
-                        request.addOnCompleteListener { task: Task<ReviewInfo?> ->
-                            if (task.isSuccessful) {
-                                // We can get the ReviewInfo object
-                                val reviewInfo = task.result
-                                if(activityToOpen!=null) {
-                                    //check for null
-                                    val flow = manager.launchReviewFlow(
-                                        activityToOpen?.newInstance()!!,
-                                        reviewInfo
-                                    )
-                                    flow.addOnCompleteListener { taask: Task<Void?>? ->
-                                        Log.d("main", "inAppreview: completed")
-                                    }
-                                }
-                            } else {
-                                // There was some problem, continue regardless of the result.
-                                Log.d("inAppreview", "checkForNotis: failed")
-                            }
-                        }
-                    } else if (rating > 0) {
-                        Toast.makeText(context, "Thanks for your feedback :)", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-
-                if (intent.hasExtra("which")) {
-                    val which = intent.getStringExtra("which")
-                    val url = intent.getStringExtra("link")
-                    val title = intent.getStringExtra("title")
-
-                    when (which) {
-                        "B" -> {
-                            try {
-                                val intent1 = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                context.startActivity(intent1)
-                            } catch (e: ActivityNotFoundException) {
-                                Toast.makeText(
-                                    context,
-                                    "Unable to open the link",
-                                    Toast.LENGTH_LONG
-                                )
-                                    .show()
-                            }
-                        }
-                        "P" -> {
-                            try {
-                                val intent1 = Intent(
-                                    Intent.ACTION_VIEW, Uri.parse(
-                                        "market://details?id=$url"
-                                    )
-                                )
-                                context.startActivity(intent1)
-                            } catch (e: ActivityNotFoundException) {
-                                e.printStackTrace()
-                                val intent1 = Intent(
-                                    Intent.ACTION_VIEW, Uri.parse(
-                                        "https://play.google.com/store/apps/details?id=$url"
-                                    )
-                                )
-                                context.startActivity(intent1)
-                            }
-                        }
-                        "L" -> {
-                            try {
-                                val intent1 = Intent(context, webViewActivityToOpen)
-                                intent1.putExtra("link", url)
-                                intent1.putExtra("title", title)
-                                context.startActivity(intent1)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                        "D" -> {
-                            try {
-                                val intent1 = Intent(context, activityToOpen)
-                                intent1.putExtra(intentParam, url)
-                                context.startActivity(intent1)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                        else -> {
-                            Log.d(TAG, "No event fired")
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "checkForNotifications: \$e")
-//                Dont push
-            }
-        }
         var bitmapImage: Bitmap? = null
             private set
     }
