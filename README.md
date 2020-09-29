@@ -6,6 +6,7 @@
 - [Installation](#installation)
 - [Template Types](#template-types)
 - [Template Keys](#template-keys)
+- [Functions](#functions)
 
 # Installation
 
@@ -163,7 +164,11 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
 }
 ```
 
-## Call *checkForNotifications* method in your MainActivity to recieve data from notifications
+# Functions
+
+[(Back to top)](#table-of-contents)
+
+1.Call *checkForNotifications* method in your MainActivity to recieve data from notifications
 ```
 checkForNotifications(context: Context, intent: Intent, webViewActivity: Class<out Activity?>?,activityToOpen: Class<out Activity?>?,intentParam1: String, intentParam2: String, intentParam3: String)
 ```
