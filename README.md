@@ -109,10 +109,6 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
  link | Required if 'which' is entered | url for 'which' type
  large_icon | Optional | Large Icon 
  small_icon | Optional | Small Icon
- title_clr | Optional | Title Color in HEX
- message_clr | Optional | Message Color in HEX
- small_icon_clr | Optional | Small Icon Color in HEX
- pt_bg | Required | Background Color in HEX
  
 
 ### Rating Template
