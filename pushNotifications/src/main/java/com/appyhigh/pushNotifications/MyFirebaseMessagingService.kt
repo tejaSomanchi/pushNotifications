@@ -95,6 +95,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     extras.putString(key, value)
                 }
                 val notificationType = extras.getString("notificationType")
+                FCM_ICON = extras.getInt("small_icon",FCM_ICON)
+                FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity",null)) as Class<out Activity?>?
                 val info = CleverTapAPI.getNotificationInfo(extras)
                 if (info.fromCleverTap) {
                     if (extras.getString("nm") != "" || extras.getString("nm") != null
@@ -155,6 +157,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             var link = extras.getString("link")
             var which = extras.getString("which")
             var title = extras.getString("title")
+            if(message==null || message.equals("")){
+                message = extras!!.getString("nm")
+            }
+            if(title==null || title.equals("")){
+                title = extras.getString("nt")
+            }
             Log.i("Result", "Got the data yessss")
             val rand = Random()
             val a = rand.nextInt(101) + 1
@@ -408,11 +416,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
             contentViewSmall!!.setImageViewResource(
                 R.id.small_icon,
-                R.drawable.ic_launcher_foreground
+                FCM_ICON
             )
             contentViewBig!!.setImageViewResource(
                 R.id.small_icon,
-                R.drawable.ic_launcher_foreground
+                FCM_ICON
             )
 //
 //            setCustomContentViewDotSep(contentViewBig);
@@ -719,9 +727,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun setUp(context: Context, extras: Bundle?) {
         message = extras!!.getString("message")
+        if(message==null || message.equals("")){
+            message = extras!!.getString("nm")
+        }
         messageBody = extras!!.getString("messageBody")
         message_clr = extras!!.getString("message_clr")
         title = extras!!.getString("title")
+        if(title==null || title.equals("")){
+            title = extras.getString("nt")
+        }
         title_clr = extras!!.getString("title_clr")
         meta_clr = extras!!.getString("meta_clr")
         pt_bg = extras!!.getString("pt_bg")

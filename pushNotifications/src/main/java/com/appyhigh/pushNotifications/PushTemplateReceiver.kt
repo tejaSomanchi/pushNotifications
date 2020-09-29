@@ -1,9 +1,6 @@
 package com.appyhigh.pushNotifications
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -294,11 +291,19 @@ class PushTemplateReceiver : BroadcastReceiver() {
         messageBody = extras!!.getString("messageBody")
         message_clr = extras!!.getString("message_clr")
         title = extras!!.getString("title")
+        if(message==null || message.equals("")){
+            message = extras!!.getString("nm")
+        }
+        if(title==null || title.equals("")){
+            title = extras.getString("nt")
+        }
         title_clr = extras!!.getString("title_clr")
         meta_clr = extras!!.getString("meta_clr")
         pt_bg = extras!!.getString("pt_bg")
         image = extras!!.getString("image")
         large_icon = extras!!.getString("large_icon")
         small_icon_clr = extras!!.getString("small_icon_clr")
+        FCM_ICON = extras.getInt("small_icon",FCM_ICON)
+        FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity",null)) as Class<out Activity?>?
     }
 }
