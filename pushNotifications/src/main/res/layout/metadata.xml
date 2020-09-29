@@ -37,7 +37,8 @@
         android:padding="1dp"
         android:scaleType="centerInside"
         android:src="@drawable/pt_dot_sep"
-        android:layout_toRightOf="@id/app_name" />
+        android:layout_toRightOf="@id/app_name"
+        />
 
     <TextView
         android:id="@+id/subtitle"
