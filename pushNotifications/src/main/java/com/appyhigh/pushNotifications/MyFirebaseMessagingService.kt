@@ -512,15 +512,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                             // We can get the ReviewInfo object
                             val reviewInfo = task.result
                             val myActivity: Activity = context as Activity
-                            if(activityToOpen!=null) {
-                                //check for null
-                                val flow = manager.launchReviewFlow(
-                                    myActivity,
-                                    reviewInfo
-                                )
-                                flow.addOnCompleteListener { taask: Task<Void?>? ->
-                                    Log.d("main", "inAppreview: completed")
-                                }
+                            val flow = manager.launchReviewFlow(myActivity, reviewInfo)
+                            flow.addOnCompleteListener { taask: Task<Void?>? ->
+                                Log.d("main", "inAppreview: completed")
                             }
                         } else {
                             // There was some problem, continue regardless of the result.

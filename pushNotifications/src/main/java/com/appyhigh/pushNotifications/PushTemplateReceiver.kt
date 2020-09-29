@@ -34,7 +34,6 @@ class PushTemplateReceiver : BroadcastReceiver() {
     private var pt_large_icon: String? = null
     private var pt_title_clr: String? = null
     private var pt_msg_clr: String? = null
-    private var deepLinkList = ArrayList<String?>()
     private var pt_bg: String? = null
     private val smallIcon = 0
     private var pt_dot = 0
@@ -52,7 +51,6 @@ class PushTemplateReceiver : BroadcastReceiver() {
         //        Utils.createSilentNotificationChannel(context);
         if (intent.extras != null) {
             val extras = intent.extras
-            deepLinkList = Utils.getDeepLinkListFromExtras(extras!!)
             setUp(context, extras)
             handleRatingNotification(context, extras)
         }
@@ -81,7 +79,6 @@ class PushTemplateReceiver : BroadcastReceiver() {
             val map = HashMap<String, Any>()
             Log.d(TAG, "handleRatingNotification big image: $pt_big_img")
             clicked = extras!!.getInt("clicked", 0)
-            val pt_dl_clicked = deepLinkList[4]
             Log.d(TAG, "handleRatingNotification: $clicked")
             when (clicked) {
                 1 -> contentViewRating!!.setImageViewResource(R.id.star1, R.drawable.pt_star_filled)
@@ -121,12 +118,7 @@ class PushTemplateReceiver : BroadcastReceiver() {
             val name = "General"
             val description = "General Notifications sent by the app"
             val notificationId = extras.getInt("notificationId")
-            var launchIntent = Intent()
-            if (clicked == 5 && !pt_dl_clicked.equals("")) {
-                launchIntent = Intent(Intent.ACTION_VIEW, Uri.parse(pt_dl_clicked))
-            } else {
-                launchIntent = Intent(context, Class.forName(mainActivity))
-            }
+            var launchIntent = Intent(context, Class.forName(mainActivity))
             launchIntent.putExtras(extras)
             launchIntent.putExtra("rating", clicked)
             launchIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
