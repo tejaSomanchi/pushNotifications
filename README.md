@@ -70,14 +70,15 @@ implementation 'com.github.
 
 Basic Template is the basic push notification received on apps.
 <br/>(Expanded and unexpanded example)<br/><br/>
-![Basic with color](https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/basic%20color.png)
+
+<img src="https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/basic%20color.png" width="300" />
 
 
 ## Rating Template
 
 Rating template lets your users give you feedback, this feedback is captured and if five starts is clicked then [playstore in-app review](https://developer.android.com/guide/playcore/in-app-review) is displayed inside the app.<br/>(Expanded and unexpanded example)<br/>
 
-![Rating](https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/rating.gif)
+<img src="https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/rating.gif" width="300" />
 
 
 ## Bezel Template
@@ -86,7 +87,7 @@ The Bezel template ensures that the background image covers the entire available
 
 ### Zero Bezel Template
 
-![Zero Bezel](https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/zerobezel.gif)
+<img src="https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/zerobezel.gif" width="300" />
 
 ### One Bezel Template
 
