@@ -80,23 +80,29 @@ Rating template lets your users give you feedback, this feedback is captured and
 ![Rating](https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/rating.gif)
 
 
-## Zero Bezel Template
+## Bezel Template
 
-The Zero Bezel template ensures that the background image covers the entire available surface area of the push notification. All the text is overlayed on the image.<br/>(Expanded and unexpanded example)<br/>
+The Bezel template ensures that the background image covers the entire available surface area of the push notification. All the text is overlayed on the image.<br/>(Expanded and unexpanded example)<br/>
+
+### Zero Bezel Template
 
 ![Zero Bezel](https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/zerobezel.gif)
+
+### One Bezel Template
+
+![One Bezel](https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/zerobezel.gif)
 
 # Template Keys
 
 [(Back to top)](#table-of-contents)
-
-### Basic Template
 
 We have 4 types of push notifications P, B, L and D which are identified by the which parameter.
 - P type notifications must open the play store. ("url": "com.appyhigh")
 - B type notifications must open the default browser. ("url": "https://youtube.com")
 - L type notifications must open the webview within the app. ("url": "https://youtube.com")
 - D type notification must open a specific page within the app. ("url": "AppName://ACTIVITYNAME")
+
+### Basic Template
 
  Basic Template Keys | Required | Description 
  ---:|:---:|:---| 
@@ -121,11 +127,12 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
  message | Required | Message 
  messageBody | Required | Message line when Notification is expanded
  image | Required | Image in url
+ which | Optional | Value - `P`/`B`/`L`/`D`
+ link | Required if 'which' is entered | url for 'which' type
  large_icon | Optional | Large Icon 
  small_icon | Optional | Small Icon
  title_clr | Optional | Title Color in HEX
  message_clr | Optional | Message Color in HEX
- small_icon_clr | Optional | Small Icon Color in HEX
  pt_bg | Required | Background Color in HEX
  
 ### Zero Bezel Template
@@ -138,11 +145,30 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
  message | Required | Message 
  messageBody | Required | Message line when Notification is expanded
  image | Required | Image in url
+ which | Optional | Value - `P`/`B`/`L`/`D`
+ link | Required if 'which' is entered | url for 'which' type
  large_icon | Optional | Large Icon 
  small_icon | Optional | Small Icon
  title_clr | Optional | Title Color in HEX
  message_clr | Optional | Message Color in HEX
- small_icon_clr | Optional | Small Icon Color in HEX
+ pt_bg | Required | Background Color in HEX
+ 
+ ### One Bezel Template
+ 
+ One Bezel Template Keys | Required | Description 
+ ---:|:---:|:--- 
+ notificationType | Required  | Value - `O`
+ target_activity | Required | Activity that should be opened when notification is clicked
+ title | Required | Title 
+ message | Required | Message 
+ messageBody | Required | Message line when Notification is expanded
+ image | Required | Image in url
+ which | Optional | Value - `P`/`B`/`L`/`D`
+ link | Required if 'which' is entered | url for 'which' type
+ large_icon | Optional | Large Icon 
+ small_icon | Optional | Small Icon
+ title_clr | Optional | Title Color in HEX
+ message_clr | Optional | Message Color in HEX
  pt_bg | Required | Background Color in HEX
   
   
