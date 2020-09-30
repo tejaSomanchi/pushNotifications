@@ -113,6 +113,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                                         setUp(this, extras)
                                         renderZeroBezelNotification(this, extras)
                                     }
+                                    "O" -> {
+                                        setUp(this, extras)
+                                        renderOneBezelNotification(this, extras)
+                                    }
                                     else -> {
                                         sendNotification(extras)
                                     }
@@ -135,6 +139,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         "Z" -> {
                             setUp(this, extras)
                             renderZeroBezelNotification(this, extras)
+                        }
+                        "O" -> {
+                            setUp(this, extras)
+                            renderOneBezelNotification(this, extras)
                         }
                         else -> {
                             Log.d(TAG, "onMessageReceived: in else part")
@@ -368,12 +376,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         try {
             contentViewBig = RemoteViews(context.packageName, R.layout.zero_bezel)
             setCustomContentViewBasicKeys(contentViewBig!!, context)
-            val textOnlySmallView = small_view != null && small_view == "text_only"
-            contentViewSmall = if (textOnlySmallView) {
-                RemoteViews(context.packageName, R.layout.cv_small_text_only)
-            } else {
-                RemoteViews(context.packageName, R.layout.cv_small_zero_bezel)
-            }
+            contentViewSmall = RemoteViews(context.packageName, R.layout.cv_small_zero_bezel)
 
 
             setCustomContentViewBasicKeys(contentViewSmall!!, context)
@@ -381,11 +384,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             setCustomContentViewTitle(contentViewSmall!!, title)
             setCustomContentViewMessage(contentViewBig!!, message)
 
-            if (textOnlySmallView) {
-                contentViewSmall!!.setViewVisibility(R.id.msg, View.GONE)
-            } else {
-                setCustomContentViewMessage(contentViewSmall!!, message)
-            }
+            setCustomContentViewMessage(contentViewSmall!!, message)
+
 
             setCustomContentViewMessageSummary(contentViewBig!!, messageBody)
             setCustomContentViewTitleColour(contentViewBig!!, title_clr)
@@ -407,12 +407,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             bitmapImage = getBitmapfromUrl(image)
             contentViewBig!!.setImageViewBitmap(R.id.big_image, bitmapImage)
 
-            if (!textOnlySmallView) {
-                contentViewSmall!!.setImageViewBitmap(R.id.big_image, bitmapImage)
-            }
-            if (textOnlySmallView) {
-                contentViewSmall!!.setImageViewBitmap(R.id.large_icon, bitmapImage)
-            }
+            contentViewSmall!!.setImageViewBitmap(R.id.big_image, bitmapImage)
 
             contentViewSmall!!.setImageViewResource(
                 R.id.small_icon,
@@ -469,6 +464,99 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
 
+
+    private fun renderOneBezelNotification(context: Context, extras: Bundle) {
+        try {
+            contentViewBig = RemoteViews(context.packageName, R.layout.one_bezel)
+            setCustomContentViewBasicKeys(contentViewBig!!, context)
+            contentViewSmall = RemoteViews(context.packageName, R.layout.cv_small_one_bezel)
+
+            setCustomContentViewBasicKeys(contentViewSmall!!, context)
+            setCustomContentViewTitle(contentViewBig!!, title)
+            setCustomContentViewTitle(contentViewSmall!!, title)
+            setCustomContentViewMessage(contentViewBig!!, message)
+            setCustomContentViewMessage(contentViewSmall!!, message)
+
+
+            setCustomContentViewMessageSummary(contentViewBig!!, messageBody)
+            setCustomContentViewTitleColour(contentViewBig!!, title_clr)
+            setCustomContentViewTitleColour(contentViewSmall!!, title_clr)
+            setCustomContentViewExpandedBackgroundColour(contentViewBig!!, pt_bg)
+            setCustomContentViewCollapsedBackgroundColour(contentViewSmall!!, pt_bg)
+            setCustomContentViewMessageColour(contentViewBig!!, message_clr)
+            setCustomContentViewMessageColour(contentViewSmall!!, message_clr)
+
+            val launchIntent = Intent(context, FCM_TARGET_ACTIVITY)
+            launchIntent.putExtras(extras)
+            launchIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            val pIntent = PendingIntent.getActivity(
+                context,
+                0,
+                launchIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
+            )
+            bitmapImage = getBitmapfromUrl(image)
+            contentViewBig!!.setImageViewBitmap(R.id.big_image, bitmapImage)
+            contentViewSmall!!.setImageViewBitmap(R.id.large_icon, bitmapImage)
+
+
+            contentViewSmall!!.setImageViewResource(
+                R.id.small_icon,
+                FCM_ICON
+            )
+            contentViewBig!!.setImageViewResource(
+                R.id.small_icon,
+                FCM_ICON
+            )
+//
+//            setCustomContentViewDotSep(contentViewBig);
+//            setCustomContentViewDotSep(contentViewSmall);
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val id = "messenger_general"
+            val name = "General"
+            val description = "General Notifications sent by the app"
+            val rand = Random()
+            val a = rand.nextInt(101) + 1
+            val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            val notificationBuilder = NotificationCompat.Builder(this, id)
+                //.setLargeIcon(image)/*Notification icon image*/
+                .setSmallIcon(FCM_ICON)
+                .setContentTitle(title)
+                .setContentText(message)
+                //.setStyle(new NotificationCompat.BigPictureStyle()
+                //.bigPicture(image))/*Notification with Image*/
+                //.setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(contentViewSmall)
+                .setCustomBigContentView(contentViewBig)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pIntent)
+                .setPriority(Notification.PRIORITY_DEFAULT)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // The id of the channel.
+                val mChannel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH)
+                mChannel.description = description
+                mChannel.enableLights(true)
+                mChannel.lightColor = Color.BLUE
+                mChannel.enableVibration(true)
+                if (notificationManager != null) {
+                    notificationManager.createNotificationChannel(mChannel)
+                    notificationManager.notify(a + 1, notificationBuilder.setChannelId(id).build())
+                }
+            }
+            else {
+                notificationManager?.notify(a + 1, notificationBuilder.build())
+            }
+            Log.d(TAG, "renderOneBezelNotification: ")
+        } catch (t: Throwable) {
+            Log.d(TAG, "renderOneBezelNotification: $t")
+        }
+    }
+
+
+
+
     /*
      *To get a Bitmap image from the URL received
      * */
@@ -486,15 +574,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    fun checkForNotifications(
-        context: Context,
-        intent: Intent,
-        webViewActivityToOpen: Class<out Activity?>?,
-        activityToOpen: Class<out Activity?>?,
-        intentParam1: String,
-        intentParam2: String,
-        intentParam3: String
-    ) {
+    fun checkForNotifications(context: Context, intent: Intent, webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam1: String, intentParam2: String, intentParam3: String)
+    {
         try {
             val rating: Int = intent.getIntExtra("rating", 0)
             Log.i("Result", "Got the data " + intent.getIntExtra("rating", 0))
