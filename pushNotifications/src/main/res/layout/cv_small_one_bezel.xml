@@ -35,7 +35,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
-                android:textSize="10sp"
                 android:layout_alignParentRight="true" />
         </RelativeLayout>
 
@@ -59,7 +58,8 @@
                 android:textAppearance="@style/TextAppearance.Compat.Notification.Title"
                 android:layout_marginRight="@dimen/metadata_title_margin_horizontal"
                 android:layout_alignParentRight="true"
-                android:layout_marginLeft="15dp" />
+                android:layout_marginLeft="15dp"
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/msg"
@@ -73,6 +73,7 @@
                 android:maxLines="3"
                 android:layout_alignLeft="@id/title"
                 android:layout_alignParentRight="true"
+                android:textSize="13sp"
                 />
         </RelativeLayout>
 

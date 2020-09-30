@@ -65,7 +65,7 @@
             android:text="title"
             android:textAppearance="@style/PushTitle"
             android:textColor="@color/white"
-            android:textSize="15sp"/>
+            android:textSize="13sp"/>
 
         <TextView
             android:id="@+id/msg"
@@ -77,7 +77,7 @@
             android:textAppearance="@style/PushMessage"
             android:textColor="@color/white"
             android:layout_alignLeft="@id/title"
-            android:textSize="15sp"/>
+            android:textSize="13sp"/>
 
     </RelativeLayout>
 
