@@ -90,7 +90,7 @@ The Bezel template ensures that the background image covers the entire available
 
 ### One Bezel Template
 
-![One Bezel](https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/zerobezel.gif)
+![One Bezel](https://user-images.githubusercontent.com/69451072/94699515-03c24200-0358-11eb-9b29-ec3d22e40890.png = 250x250)
 
 # Template Keys
 
