@@ -686,10 +686,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     override fun onInAppButtonClick(hashMap: HashMap<String?, String?>) {
         Log.d("inApp", "onInAppButtonClick: $hashMap")
         val extras = Bundle()
-        for ((key, value) in hashMap!!.entries) {
+        for ((key, value) in hashMap.entries) {
             extras.putString(key, value)
             Log.d("extras", "-> $extras")
         }
+        Log.d("inApp", "onInAppButtonClick: "+ extras)
         checkForInAppNotifications(inAppContext,extras,inAppWebViewActivityToOpen,inAppActivityToOpen,inAppIntentParam)
     }
 
@@ -707,7 +708,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     fun checkForInAppNotifications( context: Context, extras: Bundle, webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam: String)
     {
 
-
+        Log.d("inApp", "onInAppButtonClick:  inside")
         try {
             if (extras.containsKey("which")) {
                 val which = extras.getString("which")
