@@ -23,6 +23,10 @@ import com.clevertap.android.sdk.InAppNotificationButtonListener
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
+import com.google.firebase.inappmessaging.FirebaseInAppMessaging
+import com.google.firebase.inappmessaging.FirebaseInAppMessagingClickListener
+import com.google.firebase.inappmessaging.model.Action
+import com.google.firebase.inappmessaging.model.InAppMessage
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.net.HttpURLConnection
@@ -30,7 +34,7 @@ import java.net.URL
 import java.util.*
 
 
-class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationButtonListener {
+class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationButtonListener, FirebaseInAppMessagingClickListener {
 
     var bitmap: Bitmap? = null
     private var title: String? = null
@@ -690,13 +694,50 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             extras.putString(key, value)
             Log.d("extras", "-> $extras")
         }
-        Log.d("inApp", "onInAppButtonClick: "+ extras)
-        checkForInAppNotifications(inAppContext,extras,inAppWebViewActivityToOpen,inAppActivityToOpen,inAppIntentParam)
+        Log.d("inApp", "onInAppButtonClick: " + extras)
+        checkForInAppNotifications(
+            inAppContext,
+            extras,
+            inAppWebViewActivityToOpen,
+            inAppActivityToOpen,
+            inAppIntentParam
+        )
+    }
+
+    override fun messageClicked(inAppMessage: InAppMessage, action: Action) {
+
+        // Determine which URL the user clicked
+        val url = action.actionUrl
+
+        Log.d(TAG, "messageClicked: $url")
+
+        val dataBundle: Map<String, String>? = inAppMessage.data
+
+        Log.d(TAG, "messageClicked: " + dataBundle.toString())
+        val extras = Bundle()
+        for ((key, value) in dataBundle!!.entries) {
+            extras.putString(key, value)
+            Log.d("extras", "-> $extras")
+        }
+
+        checkForInAppNotifications(
+            inAppContext,
+            extras,
+            inAppWebViewActivityToOpen,
+            inAppActivityToOpen,
+            inAppIntentParam
+        )
     }
 
 
-    fun setListener(context: Context,  webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam: String) {
+    fun setListener(
+        context: Context,
+        webViewActivityToOpen: Class<out Activity?>?,
+        activityToOpen: Class<out Activity?>?,
+        intentParam: String
+    ) {
         CleverTapAPI.getDefaultInstance(context)!!.setInAppNotificationButtonListener(this)
+        FirebaseInAppMessaging.getInstance().addClickListener(this)
         inAppContext = context
         inAppWebViewActivityToOpen = webViewActivityToOpen
         inAppActivityToOpen = activityToOpen
@@ -705,7 +746,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
 
 
-    fun checkForInAppNotifications( context: Context, extras: Bundle, webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam: String)
+    fun checkForInAppNotifications(
+        context: Context,
+        extras: Bundle,
+        webViewActivityToOpen: Class<out Activity?>?,
+        activityToOpen: Class<out Activity?>?,
+        intentParam: String
+    )
     {
 
         Log.d("inApp", "onInAppButtonClick:  inside")
@@ -940,4 +987,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         var bitmapImage: Bitmap? = null
             private set
     }
+
 }
