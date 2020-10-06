@@ -689,7 +689,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
 
     fun setListener(context: Context,  webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam: String) {
-        CleverTapAPI.getDefaultInstance(applicationContext)!!.setInAppNotificationButtonListener(this)
+        CleverTapAPI.getDefaultInstance(context)!!.setInAppNotificationButtonListener(this)
         inAppContext = context
         inAppWebViewActivityToOpen = webViewActivityToOpen
         inAppActivityToOpen = activityToOpen
