@@ -685,6 +685,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
     override fun onInAppButtonClick(hashMap: HashMap<String?, String?>) {
         Log.d("inApp", "onInAppButtonClick: $hashMap")
+        val extras = Bundle()
+        for ((key, value) in hashMap!!.entries) {
+            extras.putString(key, value)
+            Log.d("extras", "-> $extras")
+        }
+        checkForInAppNotifications(inAppContext,extras,inAppWebViewActivityToOpen,inAppActivityToOpen,inAppIntentParam)
     }
 
 
@@ -698,13 +704,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
 
 
-    fun checkForInAppNotifications(hashMap: HashMap<String, String?> )
+    fun checkForInAppNotifications( context: Context, extras: Bundle, webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam: String)
     {
-        val extras = Bundle()
-        for ((key, value) in hashMap!!.entries) {
-            extras.putString(key, value)
-            Log.d("extras", "-> $extras")
-        }
+
 
         try {
             if (extras.containsKey("which")) {
@@ -716,10 +718,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     "B" -> {
                         try {
                             val intent1 = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                            inAppContext.startActivity(intent1)
+                            context.startActivity(intent1)
                         } catch (e: ActivityNotFoundException) {
                             Toast.makeText(
-                                inAppContext,
+                                context,
                                 "Unable to open the link",
                                 Toast.LENGTH_LONG
                             )
@@ -733,7 +735,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                                     "market://details?id=$url"
                                 )
                             )
-                            inAppContext.startActivity(intent1)
+                            context.startActivity(intent1)
                         } catch (e: ActivityNotFoundException) {
                             e.printStackTrace()
                             val intent1 = Intent(
@@ -741,24 +743,24 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                                     "https://play.google.com/store/apps/details?id=$url"
                                 )
                             )
-                            inAppContext.startActivity(intent1)
+                            context.startActivity(intent1)
                         }
                     }
                     "L" -> {
                         try {
-                            val intent1 = Intent(inAppContext, inAppWebViewActivityToOpen)
+                            val intent1 = Intent(context, webViewActivityToOpen)
                             intent1.putExtra("link", url)
                             intent1.putExtra("title", title)
-                            inAppContext.startActivity(intent1)
+                            context.startActivity(intent1)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
                     }
                     "D" -> {
                         try {
-                            val intent1 = Intent(inAppContext, inAppActivityToOpen)
-                            intent1.putExtra(inAppIntentParam, url)
-                            inAppContext.startActivity(intent1)
+                            val intent1 = Intent(context, activityToOpen)
+                            intent1.putExtra(intentParam, url)
+                            context.startActivity(intent1)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
