@@ -1,5 +1,4 @@
 package com.appyhigh.pushNotifications
-
 import android.app.*
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -20,6 +19,7 @@ import androidx.core.app.NotificationCompat
 import com.appyhigh.pushNotifications.Constants.FCM_ICON
 import com.appyhigh.pushNotifications.Constants.FCM_TARGET_ACTIVITY
 import com.clevertap.android.sdk.CleverTapAPI
+import com.clevertap.android.sdk.InAppNotificationButtonListener
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
@@ -29,7 +29,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 
-class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationButtonListener {
 
     var bitmap: Bitmap? = null
     private var title: String? = null
@@ -48,6 +49,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private var small_icon_clr: String? = null
     private var dot_sep: Bitmap? = null
     private val small_view: String? = null
+    private lateinit var inAppContext: Context
+    private var inAppWebViewActivityToOpen: Class<out Activity?>? = null
+    private var inAppActivityToOpen: Class<out Activity?>? = null
+    private lateinit var inAppIntentParam: String
 
 
     override fun onMessageSent(s: String) {
@@ -95,15 +100,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     extras.putString(key, value)
                 }
                 val notificationType = extras.getString("notificationType")
-                FCM_ICON = extras.getInt("small_icon",FCM_ICON)
-                FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity",null)) as Class<out Activity?>?
+                FCM_ICON = extras.getInt("small_icon", FCM_ICON)
+                FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity", null)) as Class<out Activity?>?
                 val info = CleverTapAPI.getNotificationInfo(extras)
                 if (info.fromCleverTap) {
                     if (extras.getString("nm") != "" || extras.getString("nm") != null
                     ) {
                         val message = extras.getString("message")
                         if (message != null) {
-                            if (message !== "") {
+                            if (message != "") {
                                 when (notificationType) {
                                     "R" -> {
                                         setUp(this, extras)
@@ -254,6 +259,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             contentViewRating!!.setImageViewResource(R.id.star3, R.drawable.pt_star_outline)
             contentViewRating!!.setImageViewResource(R.id.star4, R.drawable.pt_star_outline)
             contentViewRating!!.setImageViewResource(R.id.star5, R.drawable.pt_star_outline)
+
 
 //            setCustomContentViewBigImage(contentViewRating, image);
             bitmapImage = getBitmapfromUrl(image)
@@ -574,7 +580,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    fun checkForNotifications(context: Context, intent: Intent, webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam1: String, intentParam2: String, intentParam3: String)
+    fun checkForNotifications(
+        context: Context,
+        intent: Intent,
+        webViewActivityToOpen: Class<out Activity?>?,
+        activityToOpen: Class<out Activity?>?,
+        intentParam: String
+    )
     {
         try {
             val rating: Int = intent.getIntExtra("rating", 0)
@@ -653,7 +665,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     "D" -> {
                         try {
                             val intent1 = Intent(context, activityToOpen)
-                            intent1.putExtra(intentParam1, url)
+                            intent1.putExtra(intentParam, url)
                             context.startActivity(intent1)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -666,6 +678,98 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         } catch (e: Exception) {
             Log.e(TAG, "checkForNotifications: \$e")
+//                Dont push
+        }
+    }
+
+
+    override fun onInAppButtonClick(hashMap: HashMap<String?, String?>) {
+        Log.d("inApp", "onInAppButtonClick: $hashMap")
+    }
+
+
+    fun setListener(context: Context,  webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam: String) {
+        CleverTapAPI.getDefaultInstance(applicationContext)!!.setInAppNotificationButtonListener(this)
+        inAppContext = context
+        inAppWebViewActivityToOpen = webViewActivityToOpen
+        inAppActivityToOpen = activityToOpen
+        inAppIntentParam = intentParam
+    }
+
+
+
+    fun checkForInAppNotifications(hashMap: HashMap<String, String?> )
+    {
+        val extras = Bundle()
+        for ((key, value) in hashMap!!.entries) {
+            extras.putString(key, value)
+            Log.d("extras", "-> $extras")
+        }
+
+        try {
+            if (extras.containsKey("which")) {
+                val which = extras.getString("which")
+                val url = extras.getString("link")
+                val title = extras.getString("title")
+
+                when (which) {
+                    "B" -> {
+                        try {
+                            val intent1 = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            inAppContext.startActivity(intent1)
+                        } catch (e: ActivityNotFoundException) {
+                            Toast.makeText(
+                                inAppContext,
+                                "Unable to open the link",
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                        }
+                    }
+                    "P" -> {
+                        try {
+                            val intent1 = Intent(
+                                Intent.ACTION_VIEW, Uri.parse(
+                                    "market://details?id=$url"
+                                )
+                            )
+                            inAppContext.startActivity(intent1)
+                        } catch (e: ActivityNotFoundException) {
+                            e.printStackTrace()
+                            val intent1 = Intent(
+                                Intent.ACTION_VIEW, Uri.parse(
+                                    "https://play.google.com/store/apps/details?id=$url"
+                                )
+                            )
+                            inAppContext.startActivity(intent1)
+                        }
+                    }
+                    "L" -> {
+                        try {
+                            val intent1 = Intent(inAppContext, inAppWebViewActivityToOpen)
+                            intent1.putExtra("link", url)
+                            intent1.putExtra("title", title)
+                            inAppContext.startActivity(intent1)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    "D" -> {
+                        try {
+                            val intent1 = Intent(inAppContext, inAppActivityToOpen)
+                            intent1.putExtra(inAppIntentParam, url)
+                            inAppContext.startActivity(intent1)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    else -> {
+                        Log.d(TAG, "No event fired")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "checkForInAppNotifications: \$e")
 //                Dont push
         }
     }
@@ -735,6 +839,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
+
     private fun setCustomContentViewMessageColour(contentView: RemoteViews, message_clr: String?) {
         if (message_clr != null && !message_clr.isEmpty()) {
             contentView.setTextColor(
@@ -744,6 +849,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             )
         }
     }
+
 
     private fun setCustomContentViewTitleColour(contentView: RemoteViews, title_clr: String?) {
         if (title_clr != null && !title_clr.isEmpty()) {
@@ -792,6 +898,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
     }
+
 
     private fun setCustomContentViewTitle(contentView: RemoteViews, title: String?) {
         if (title != null && !title.isEmpty()) {
