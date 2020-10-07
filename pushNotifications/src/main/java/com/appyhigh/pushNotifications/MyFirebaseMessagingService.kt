@@ -709,7 +709,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         val url = action.actionUrl
         val activity = inAppContext as Activity
         inAppContext.startActivity(activity.intent)
-
+        activity.finish()
         val dataBundle: Map<String, String>? = inAppMessage.data
 
         Log.d(TAG, "messageClicked: " + dataBundle.toString())
@@ -737,9 +737,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         if(CleverTapAPI.getDefaultInstance(context)!=null){
             CleverTapAPI.getDefaultInstance(context)!!.setInAppNotificationButtonListener(this)
         }
-        if(FirebaseInAppMessaging.getInstance()!=null){
-            FirebaseInAppMessaging.getInstance().addClickListener(this)
-        }
+        FirebaseInAppMessaging.getInstance().addClickListener(this)
         inAppContext = context
         inAppWebViewActivityToOpen = webViewActivityToOpen
         inAppActivityToOpen = activityToOpen
