@@ -199,8 +199,8 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
 checkForNotifications(context: Context, intent: Intent, webViewActivity: Class<out Activity?>?,activityToOpen: Class<out Activity?>?,intentParam: String)
 ```
 **Note:**
-1.All the parameters are required.
 
+1.All the parameters are required.
 2.Empty string - `""` should be given as default value for intentParam.
 
 ### Example
