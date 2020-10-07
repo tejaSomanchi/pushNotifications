@@ -709,6 +709,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         val url = action.actionUrl
         val activity = inAppContext as Activity
         val activity1 = inAppContext as Activity
+        val i = Intent(inAppContext, activity1::class.java)
         inAppContext.startActivity(activity1.intent)
         activity.finish()
         val dataBundle: Map<String, String>? = inAppMessage.data
