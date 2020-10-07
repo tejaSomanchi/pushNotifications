@@ -200,6 +200,7 @@ checkForNotifications(context: Context, intent: Intent, webViewActivity: Class<o
 ```
 **Note:**
 1.All the parameters are required.
+
 2.Empty string - `""` should be given as default value for intentParam.
 
 ### Example
