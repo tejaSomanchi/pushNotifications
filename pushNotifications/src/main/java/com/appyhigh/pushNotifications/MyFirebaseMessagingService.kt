@@ -708,7 +708,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         // Determine which URL the user clicked
         val url = action.actionUrl
         val activity = inAppContext as Activity
-        inAppContext.startActivity(activity.intent)
+        val activity1 = inAppContext as Activity
+        inAppContext.startActivity(activity1.intent)
         activity.finish()
         val dataBundle: Map<String, String>? = inAppMessage.data
 
