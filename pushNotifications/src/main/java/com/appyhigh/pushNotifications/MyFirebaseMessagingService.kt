@@ -57,7 +57,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     private var inAppWebViewActivityToOpen: Class<out Activity?>? = null
     private var inAppActivityToOpen: Class<out Activity?>? = null
     private lateinit var inAppIntentParam: String
-    private var inAppPresentActivity: Activity? = null
+
 
     override fun onMessageSent(s: String) {
         super.onMessageSent(s)
@@ -708,8 +708,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         // Determine which URL the user clicked
         val url = action.actionUrl
         val activity1 = inAppContext as Activity
+        (inAppContext as Activity).finish()
         inAppContext.startActivity(activity1.intent)
-        inAppPresentActivity = activity1
+
         val dataBundle: Map<String, String>? = inAppMessage.data
         Log.d(TAG, "messageClicked: " + dataBundle.toString())
         val extras = Bundle()
@@ -816,7 +817,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                         Log.d(TAG, "No event fired")
                     }
                 }
-                inAppPresentActivity?.finish()
             }
         } catch (e: Exception) {
             Log.e(TAG, "checkForInAppNotifications: \$e")
