@@ -705,9 +705,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     }
 
     override fun messageClicked(inAppMessage: InAppMessage, action: Action) {
-
         // Determine which URL the user clicked
         val url = action.actionUrl
+        val activity = inAppContext as Activity
+        inAppContext.startActivity(activity.intent)
 
         Log.d(TAG, "messageClicked: $url")
 
