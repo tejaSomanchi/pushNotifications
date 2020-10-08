@@ -210,9 +210,187 @@ checkForNotifications(context: Context, intent: Intent, webViewActivity: Class<o
 
 ### Example
 ```
-MyFirebaseMessaging.checkForNotifications(context = this, intent = intent, webViewActivity = WebViewActivity::class.java, activityToOpen = MainActivity::class.java,"","","")
+MyFirebaseMessaging.checkForNotifications(context = this, intent = intent, webViewActivity = WebViewActivity::class.java, activityToOpen = MainActivity::class.java,"")
 ```
 
 # InApp Notifications
 
 [(Back to top)](#push-notifications--inApp-notifications)
+
+# Table of contents
+
+- [Installation](#installation)
+- [Firebase](#firebase)
+- [CleverTap](#cleverTap)
+
+# Installation
+
+[(Back to top)](#table-of-contents)
+
+1.To import this library, Add the following line to your project's *build.gradle* at the end of repositories.
+```groovy
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
+}
+
+```
+2.To import this library, Add the following line to your app level *build.gradle* file.
+```groovy
+implementation 'com.github.
+
+```
+
+3.If you are using **Firebase** for InApp Notifications, then add the following lines to your app level *build.gradle* file.
+```groovy
+implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.1' (#Recommended latest version)
+```
+4.If you are using **CleverTap** for InApp Notifications, then add the following lines to your app level *build.gradle* file.
+```groovy
+implementation 'com.clevertap.android:clevertap-android-sdk:3.7.2' (#Recommended latest version)
+implementation 'androidx.fragment:fragment:1.1.0'
+```
+
+
+3.Add the following line to your *AndroidManifest.xml* for internet permission.
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+```
+
+4.If you are using **CleverTap** for InApp Notifications, then add the following lines to your *AndroidManifest.xml* file.
+
+```xml
+ <meta-data
+    android:name="CLEVERTAP_ACCOUNT_ID"
+    android:value="**your_accountId**"/>
+<meta-data
+    android:name="CLEVERTAP_TOKEN"
+    android:value="**your_token**"/>
+<activity
+    android:name="com.clevertap.android.sdk.InAppNotificationActivity"
+    android:theme="@android:style/Theme.Translucent.NoTitleBar"
+    android:configChanges="orientation|keyboardHidden"/>
+
+<meta-data
+    android:name="CLEVERTAP_INAPP_EXCLUDE"
+    android:value="**YourSplashActivity1**, **YourSplashActivity2**" /> 
+```
+
+We have 4 types of InApp notifications P, B, L and D which are identified by the which parameter.
+- P type notifications must open the play store. ("url": "com.appyhigh")
+- B type notifications must open the default browser. ("url": "https://youtube.com")
+- L type notifications must open the webview within the app. ("url": "https://youtube.com")
+- D type notification must open a specific page within the app. ("url": "AppName://ACTIVITYNAME")
+
+# Firebase
+
+[(Back to top)](#table-of-contents)
+
+1.Create a campaign in Firebase InApp Messaging console.
+2.For action urls 
+	- Enter deeplinks of the app to open a particular activity inside the app.
+	- Enter urls to redirect to playstore or browser.
+**Note**
+1.For Deep Links, do not forget to add the following lines inside the *activity* of *AndroidManifest.xml*.
+```xml
+<intent-filter android:autoVerify="true">
+    <action android:name="android.intent.action.VIEW"/>
+    <category android:name="android.intent.category.DEFAULT"/>
+    <category android:name="android.intent.category.BROWSABLE"/>
+    <data
+	android:host="your domain link which you created in firebase console**"
+	android:scheme="https"/>
+</intent-filter>
+```
+# CleverTap
+
+[(Back to top)](#table-of-contents)
+
+1.Create a mobile-inApp campaign in CleverTap console,
+2.For Buttons, enter the custom key-value pairs.
+
+Custom Keys | Required | Description 
+ ---:|:---:|:--- 
+ which | Optional | Value - `P`/`B`/`L`/`D`
+ link | Required if 'which' is entered | url for 'which' type
+ title | Optional | title to pass for webViewActivity
+ 
+3.To recieve InApp notifications, follow any of the two methods
+
+## Import the inAppButtonClickListener from Library
+1.Call the *setListener* method in the activity to handle the inApp Notification
+
+```
+setListener(context: Context, webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam: String)
+
+```
+**Note:**
+
+1.All the parameters are required.
+
+2.Empty string - `""` should be given as default value for intentParam.
+
+### Example
+```
+MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
+myFirebaseMessagingService.setListener(context = this, webViewActivity = WebViewActivity::class.java, activityToOpen = MainActivity::class.java,"");
+```
+## Implement the inAppButtonClickListener explicitly without importing it from library.
+
+1.Make sure your activity implements the InAppNotificationButtonListener and override the following method
+```
+public class MainActivity extends AppCompatActivity implements InAppNotificationButtonListener {
+	@Override
+	public void onInAppButtonClick(HashMap<String, String> hashMap) {
+	  if(hashMap != null){
+	    //Read the values
+	  }
+	}
+}
+```
+
+2.Convert the recieved hashmap to Bundle in the above *if condition*.
+
+3.Set the InAppNotificationButtonListener using the following code in your activity.
+```
+CleverTapAPI.getDefaultInstance(context).setInAppNotificationButtonListener(this);
+
+```
+
+3.Call the *checkForInAppNotifications* method inside the *onInAppButtonClick* method to handle the recieved data.
+```
+checkForInAppNotifications(context: Context, extras: Bundle, webViewActivity: Class<out Activity?>?,activityToOpen: Class<out Activity?>?,intentParam: String)
+```
+
+### Example
+```Kotlin
+class MainActivity : AppCompatActivity(), InAppNotificationButtonListener {
+	override fun onInAppButtonClick(hashMap: HashMap<String?, String?>) 
+	{
+		val extras = Bundle()
+		for ((key, value) in hashMap.entries) {
+		    extras.putString(key, value)
+		    Log.d("extras", "-> $extras")
+		}
+		checkForInAppNotifications(this, extras, WebViewActivityToOpen, activityToOpen, intentParam)
+    	}
+	
+	override fun onCreate(savedInstanceState: Bundle?) 
+	{
+		super.onCreate(savedInstanceState)
+		setContentView(R.layout.activity_main)
+		CleverTapAPI.getDefaultInstance(context)!!.setInAppNotificationButtonListener(this)
+	}
+    }
+}
+
+```
+
+
+
+
