@@ -246,7 +246,8 @@ implementation 'com.github.
 3.If you are using **Firebase** for InApp Notifications, then add the following lines to your app level *build.gradle* file.
 ```groovy
 implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.1' (#Recommended latest version)
-```
+`
+``
 4.If you are using **CleverTap** for InApp Notifications, then add the following lines to your app level *build.gradle* file.
 ```groovy
 implementation 'com.clevertap.android:clevertap-android-sdk:3.7.2' (#Recommended latest version)
@@ -292,10 +293,13 @@ We have 4 types of InApp notifications P, B, L and D which are identified by the
 [(Back to top)](#table-of-contents-1)
 
 1.Create a campaign in Firebase InApp Messaging console.
+
 2.For action urls 
 	- Enter deeplinks of the app to open a particular activity inside the app.
 	- Enter urls to redirect to playstore or browser.
+	
 **Note**
+
 1.For Deep Links, do not forget to add the following lines inside the *activity* of *AndroidManifest.xml*.
 ```xml
 <intent-filter android:autoVerify="true">
@@ -307,11 +311,13 @@ We have 4 types of InApp notifications P, B, L and D which are identified by the
 	android:scheme="https"/>
 </intent-filter>
 ```
+
 # CleverTap
 
 [(Back to top)](#table-of-contents-1)
 
 1.Create a mobile-inApp campaign in CleverTap console,
+
 2.For Buttons, enter the custom key-value pairs.
 
 Custom Keys | Required | Description 
@@ -322,7 +328,7 @@ Custom Keys | Required | Description
  
 3.To recieve InApp notifications, follow any of the two methods
 
-## Import the inAppButtonClickListener from Library
+### Import the inAppButtonClickListener from Library
 1.Call the *setListener* method in the activity to handle the inApp Notification
 
 ```
@@ -335,12 +341,12 @@ setListener(context: Context, webViewActivityToOpen: Class<out Activity?>?, acti
 
 2.Empty string - `""` should be given as default value for intentParam.
 
-### Example
+#### Example
 ```
 MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
 myFirebaseMessagingService.setListener(context = this, webViewActivity = WebViewActivity::class.java, activityToOpen = MainActivity::class.java,"");
 ```
-## Implement the inAppButtonClickListener explicitly without importing it from library.
+### Implement the inAppButtonClickListener explicitly without importing it from library.
 
 1.Make sure your activity implements the InAppNotificationButtonListener and override the following method
 ```
@@ -367,7 +373,7 @@ CleverTapAPI.getDefaultInstance(context).setInAppNotificationButtonListener(this
 checkForInAppNotifications(context: Context, extras: Bundle, webViewActivity: Class<out Activity?>?,activityToOpen: Class<out Activity?>?,intentParam: String)
 ```
 
-### Example
+#### Example
 ```Kotlin
 class MainActivity : AppCompatActivity(), InAppNotificationButtonListener {
 	override fun onInAppButtonClick(hashMap: HashMap<String?, String?>) 
