@@ -181,7 +181,7 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
   
   
 ### Example data format to send for push notifications
-```
+```json
 {
   "to": "/topics/Appname",
   "data": {
@@ -199,7 +199,7 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
 [(Back to top)](#table-of-contents)
 
 1.Call *checkForNotifications* method in your MainActivity to recieve data from notifications
-```
+```Kotlin
 checkForNotifications(context: Context, intent: Intent, webViewActivity: Class<out Activity?>?,activityToOpen: Class<out Activity?>?,intentParam: String)
 ```
 **Note:**
@@ -209,7 +209,7 @@ checkForNotifications(context: Context, intent: Intent, webViewActivity: Class<o
 2.Empty string - `""` should be given as default value for intentParam.
 
 ### Example
-```
+```Kotlin
 MyFirebaseMessaging.checkForNotifications(context = this, intent = intent, webViewActivity = WebViewActivity::class.java, activityToOpen = MainActivity::class.java,"")
 ```
 
@@ -294,6 +294,8 @@ We have 4 types of InApp notifications P, B, L and D which are identified by the
 
 1.Create a campaign in Firebase InApp Messaging console.
 
+**Note:** For more information, visit [Firebase docs for InApp Messaging](https://firebase.google.com/docs/in-app-messaging)
+
 2.For action urls 
 	- Enter deeplinks of the app to open a particular activity inside the app.
 	- Enter urls to redirect to playstore or browser.
@@ -333,7 +335,7 @@ Custom Keys | Required | Description
 ### Import the inAppButtonClickListener from Library
 1.Call the *setListener* method in the activity to handle the inApp Notification
 
-```
+```Kotlin
 setListener(context: Context, webViewActivityToOpen: Class<out Activity?>?, activityToOpen: Class<out Activity?>?, intentParam: String)
 
 ```
