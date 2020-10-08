@@ -225,7 +225,7 @@ MyFirebaseMessaging.checkForNotifications(context = this, intent = intent, webVi
 
 # Installation
 
-[(Back to top)](#table-of-contents)
+[(Back to top)](#table-of-contents-1)
 
 1.To import this library, Add the following line to your project's *build.gradle* at the end of repositories.
 ```groovy
@@ -289,7 +289,7 @@ We have 4 types of InApp notifications P, B, L and D which are identified by the
 
 # Firebase
 
-[(Back to top)](#table-of-contents)
+[(Back to top)](#table-of-contents-1)
 
 1.Create a campaign in Firebase InApp Messaging console.
 2.For action urls 
@@ -309,7 +309,7 @@ We have 4 types of InApp notifications P, B, L and D which are identified by the
 ```
 # CleverTap
 
-[(Back to top)](#table-of-contents)
+[(Back to top)](#table-of-contents-1)
 
 1.Create a mobile-inApp campaign in CleverTap console,
 2.For Buttons, enter the custom key-value pairs.
