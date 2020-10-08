@@ -1,7 +1,7 @@
 
 # Push Notifications & InApp Notifications
 - [Push Notifications](#push-notifications)
-- [InApp Notifications](#inapp-notifictions)
+- [InApp Notifications](#inApp-notifictions)
 
 # Push Notifications
 
