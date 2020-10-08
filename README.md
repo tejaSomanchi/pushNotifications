@@ -1,7 +1,7 @@
 
 # Push Notifications & InApp Notifications
 - [Push Notifications](#push-notifications)
-- [InApp Notifications](# InAapp Notifictions)
+- [In App Notifications](#in-app-notifictions)
 
 # Push Notifications
 
@@ -213,6 +213,6 @@ checkForNotifications(context: Context, intent: Intent, webViewActivity: Class<o
 MyFirebaseMessaging.checkForNotifications(context = this, intent = intent, webViewActivity = WebViewActivity::class.java, activityToOpen = MainActivity::class.java,"","","")
 ```
 
-# InApp Notifications
+# In App Notifications
 
 [(Back to top)](#push-notifications-&-inapp-notifications)
