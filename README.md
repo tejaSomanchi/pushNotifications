@@ -1,7 +1,7 @@
 
 # Push Notifications & InApp Notifications
 - [Push Notifications](#push-notifications)
-- [InApp Notifications](#in-app-notifications)
+- [InApp Notifications](#inApp-notifications)
 
 # Push Notifications
 
@@ -215,4 +215,4 @@ MyFirebaseMessaging.checkForNotifications(context = this, intent = intent, webVi
 
 # InApp Notifications
 
-[(Back to top)](#push-notifications-&-inapp-notifications)
+[(Back to top)](#push-notifications-&-inApp-notifications)
