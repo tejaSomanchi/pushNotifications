@@ -242,8 +242,8 @@ implementation 'com.github.
 3.If you are using **Firebase** for InApp Notifications, then add the following lines to your app level *build.gradle* file.
 ```groovy
 implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.1' (#Recommended latest version)
-`
-``
+```
+
 4.If you are using **CleverTap** for InApp Notifications, then add the following lines to your app level *build.gradle* file.
 ```groovy
 implementation 'com.clevertap.android:clevertap-android-sdk:3.7.2' (#Recommended latest version)
