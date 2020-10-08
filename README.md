@@ -298,7 +298,7 @@ We have 4 types of InApp notifications P, B, L and D which are identified by the
 	- Enter deeplinks of the app to open a particular activity inside the app.
 	- Enter urls to redirect to playstore or browser.
 	
-**Note**
+**Note:**
 
 1.For Deep Links, do not forget to add the following lines inside the *activity* of *AndroidManifest.xml*.
 ```xml
@@ -317,6 +317,8 @@ We have 4 types of InApp notifications P, B, L and D which are identified by the
 [(Back to top)](#table-of-contents-1)
 
 1.Create a mobile-inApp campaign in CleverTap console,
+
+**Note:** For more information, visit [CleverTap docs for InApp Notifications](https://developer.clevertap.com/docs/android#section-in-app-notifications)
 
 2.For Buttons, enter the custom key-value pairs.
 
@@ -342,14 +344,14 @@ setListener(context: Context, webViewActivityToOpen: Class<out Activity?>?, acti
 2.Empty string - `""` should be given as default value for intentParam.
 
 #### Example
-```
+```Java
 MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
 myFirebaseMessagingService.setListener(context = this, webViewActivity = WebViewActivity::class.java, activityToOpen = MainActivity::class.java,"");
 ```
 ### Implement the inAppButtonClickListener explicitly without importing it from library.
 
 1.Make sure your activity implements the InAppNotificationButtonListener and override the following method
-```
+```Java
 public class MainActivity extends AppCompatActivity implements InAppNotificationButtonListener {
 	@Override
 	public void onInAppButtonClick(HashMap<String, String> hashMap) {
@@ -363,13 +365,13 @@ public class MainActivity extends AppCompatActivity implements InAppNotification
 2.Convert the recieved hashmap to Bundle in the above *if condition*.
 
 3.Set the InAppNotificationButtonListener using the following code in your activity.
-```
+```Java
 CleverTapAPI.getDefaultInstance(context).setInAppNotificationButtonListener(this);
 
 ```
 
 3.Call the *checkForInAppNotifications* method inside the *onInAppButtonClick* method to handle the recieved data.
-```
+```Kotlin
 checkForInAppNotifications(context: Context, extras: Bundle, webViewActivity: Class<out Activity?>?,activityToOpen: Class<out Activity?>?,intentParam: String)
 ```
 
