@@ -134,9 +134,7 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
- large_icon | Optional | Large Icon 
  small_icon | Optional | Small Icon
- meta_clr | Optional | Color for appname,timestamp in HEX (default - #A6A6A6)
  title_clr | Optional | Title Color in HEX (default - ##000000)
  message_clr | Optional | Message Color in HEX (default - #000000)
  pt_bg | Required | Background Color in HEX (default - #FFFFFF)
@@ -153,7 +151,6 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
- large_icon | Optional | Large Icon 
  small_icon | Optional | Small Icon
  meta_clr | Optional | Color for appname,timestamp in HEX (default - #A6A6A6)
  title_clr | Optional | Title Color in HEX (default - ##000000)
@@ -172,7 +169,6 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
- large_icon | Optional | Large Icon 
  small_icon | Optional | Small Icon
  meta_clr | Optional | Color for appname,timestamp in HEX (default - #A6A6A6)
  title_clr | Optional | Title Color in HEX (default - ##000000)
