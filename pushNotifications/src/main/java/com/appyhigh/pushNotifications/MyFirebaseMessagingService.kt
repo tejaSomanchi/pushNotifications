@@ -23,6 +23,7 @@ import com.clevertap.android.sdk.InAppNotificationButtonListener
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.net.HttpURLConnection
@@ -53,6 +54,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     private var inAppWebViewActivityToOpen: Class<out Activity?>? = null
     private var inAppActivityToOpen: Class<out Activity?>? = null
     private lateinit var inAppIntentParam: String
+    private lateinit var appName: String
 
 
     override fun onMessageSent(s: String) {
@@ -65,9 +67,38 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         Log.d(TAG, "onSendError: $e")
     }
 
+    private fun getAppName() {
+        val applicationInfo = applicationContext.applicationInfo
+        val stringId = applicationInfo.labelRes
+        if (stringId == 0) {
+            appName = applicationInfo.nonLocalizedLabel.toString()
+        }
+        else {
+            appName = this.getString(stringId)
+        }
+    }
+
     override fun onNewToken(s: String) {
         super.onNewToken(s)
+        getAppName()
         CleverTapAPI.getDefaultInstance(applicationContext)?.pushFcmRegistrationId(s, true)
+        FirebaseMessaging.getInstance().subscribeToTopic(appName)
+            .addOnCompleteListener { task ->
+                var msg = "subscribed to "
+                if (!task.isSuccessful) {
+                    msg = "not subscribed to "
+                }
+                Log.d(TAG, msg)
+            }
+        FirebaseMessaging.getInstance().subscribeToTopic(appName+"Debug")
+            .addOnCompleteListener { task ->
+                var msg = "subscribed to "
+                if (!task.isSuccessful) {
+                    msg = "not subscribed to "
+                }
+                Log.d(TAG, msg)
+            }
+
         Log.d(TAG, "onNewToken: $s")
     }
 
