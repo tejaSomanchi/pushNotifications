@@ -57,6 +57,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     private lateinit var appName: String
 
 
+    fun MyFirebaseMessagingService() {
+        getAppName()
+        firebaseSubscribeToTopic(appName)
+        firebaseSubscribeToTopic(appName + "Debug")
+        Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayCountry())
+        Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayLanguage())
+    }
+
+
     override fun onMessageSent(s: String) {
         super.onMessageSent(s)
         Log.d(TAG, "onMessageSent: $s")
@@ -93,9 +102,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         super.onCreate()
         getAppName()
         firebaseSubscribeToTopic(appName)
-        firebaseSubscribeToTopic(appName+"Debug")
-        Log.d(TAG, "onCreate: "+Locale.getDefault().getDisplayCountry())
-        Log.d(TAG, "onCreate: "+Locale.getDefault().getDisplayLanguage())
+        firebaseSubscribeToTopic(appName + "Debug")
+        Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayCountry())
+        Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayLanguage())
 
     }
 
@@ -104,7 +113,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         getAppName()
         CleverTapAPI.getDefaultInstance(applicationContext)?.pushFcmRegistrationId(s, true)
         firebaseSubscribeToTopic(appName)
-        firebaseSubscribeToTopic(appName+"Debug")
+        firebaseSubscribeToTopic(appName + "Debug")
         Log.d(TAG, "onNewToken: $s")
     }
 
