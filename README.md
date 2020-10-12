@@ -87,7 +87,7 @@ Basic Template Keys | Required | Description
  target_activity | Required | Activity that should be opened when notification is clicked
  title | Required | Title 
  message | Required | Message 
- messageBody | Required | Message line when Notification is expanded
+ messageBody | Optional | Message line when Notification is expanded
  image | Optional | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
@@ -108,7 +108,7 @@ Rating Template Keys | Required | Description
  target_activity | Required | Activity that should be opened when notification is clicked
  title | Required | Title 
  message | Required | Message 
- messageBody | Required | Message line when Notification is expanded
+ messageBody | Optional | Message line when Notification is expanded
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
@@ -132,7 +132,7 @@ Zero Bezel Template Keys | Required | Description
  target_activity | Required | Activity that should be opened when notification is clicked
  title | Required | Title 
  message | Required | Message 
- messageBody | Required | Message line when Notification is expanded
+ messageBody | Optional | Message line when Notification is expanded
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
@@ -153,7 +153,7 @@ Zero Bezel Template Keys | Required | Description
  target_activity | Required | Activity that should be opened when notification is clicked
  title | Required | Title 
  message | Required | Message 
- messageBody | Required | Message line when Notification is expanded
+ messageBody | Optional | Message line when Notification is expanded
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
