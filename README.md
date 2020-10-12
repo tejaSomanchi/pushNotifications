@@ -9,7 +9,6 @@
 
 - [Installation](#installation)
 - [Template Types](#template-types)
-- [Template Keys](#template-keys)
 - [Functions](#functions)
 
 # Installation
@@ -70,6 +69,12 @@ implementation 'com.github.
 
 [(Back to top)](#table-of-contents)
 
+We have 4 types of push notifications P, B, L and D which are identified by the which parameter.
+- P type notifications must open the play store. ("url": "com.appyhigh")
+- B type notifications must open the default browser. ("url": "https://youtube.com")
+- L type notifications must open the webview within the app. ("url": "https://youtube.com")
+- D type notification must open a specific page within the app. ("url": "AppName://ACTIVITYNAME")
+
 ## Basic Template
 
 Basic Template is the basic push notification received on apps.
@@ -77,39 +82,7 @@ Basic Template is the basic push notification received on apps.
 
 <img src="https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/basic%20color.png" width="300" />
 
-
-## Rating Template
-
-Rating template lets your users give you feedback, this feedback is captured and if five starts is clicked then [playstore in-app review](https://developer.android.com/guide/playcore/in-app-review) is displayed inside the app.<br/>(Expanded and unexpanded example)<br/>
-
-<img src="https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/rating.gif" width="300" />
-
-
-## Bezel Template
-
-The Bezel template ensures that the background image covers the entire available surface area of the push notification. All the text is overlayed on the image.<br/>(Expanded and unexpanded example)<br/>
-
-### Zero Bezel Template
-
-<img src="https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/zerobezel.gif" width="300" />
-
-### One Bezel Template
-
-<img src="https://user-images.githubusercontent.com/69451072/94699515-03c24200-0358-11eb-9b29-ec3d22e40890.png" width="300" />
-
-# Template Keys
-
-[(Back to top)](#table-of-contents)
-
-We have 4 types of push notifications P, B, L and D which are identified by the which parameter.
-- P type notifications must open the play store. ("url": "com.appyhigh")
-- B type notifications must open the default browser. ("url": "https://youtube.com")
-- L type notifications must open the webview within the app. ("url": "https://youtube.com")
-- D type notification must open a specific page within the app. ("url": "AppName://ACTIVITYNAME")
-
-### Basic Template
-
- Basic Template Keys | Required | Description 
+Basic Template Keys | Required | Description 
  ---:|:---:|:---| 
  target_activity | Required | Activity that should be opened when notification is clicked
  title | Required | Title 
@@ -122,9 +95,14 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
  small_icon | Optional | Small Icon
  
 
-### Rating Template
 
- Rating Template Keys | Required | Description 
+## Rating Template
+
+Rating template lets your users give you feedback, this feedback is captured and if five starts is clicked then [playstore in-app review](https://developer.android.com/guide/playcore/in-app-review) is displayed inside the app.<br/>(Expanded and unexpanded example)<br/>
+
+<img src="https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/rating.gif" width="300" />
+
+Rating Template Keys | Required | Description 
  ---:|:---:|:--- 
  notificationType | Required  | Value - `R`
  target_activity | Required | Activity that should be opened when notification is clicked
@@ -138,10 +116,17 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
  title_clr | Optional | Title Color in HEX (default - ##000000)
  message_clr | Optional | Message Color in HEX (default - #000000)
  pt_bg | Required | Background Color in HEX (default - #FFFFFF)
- 
+
+
+## Bezel Template
+
+The Bezel template ensures that the background image covers the entire available surface area of the push notification. All the text is overlayed on the image.<br/>(Expanded and unexpanded example)<br/>
+
 ### Zero Bezel Template
- 
- Zero Bezel Template Keys | Required | Description 
+
+<img src="https://github.com/CleverTap/PushTemplates/blob/0.0.4/screens/zerobezel.gif" width="300" />
+
+Zero Bezel Template Keys | Required | Description 
  ---:|:---:|:--- 
  notificationType | Required  | Value - `Z`
  target_activity | Required | Activity that should be opened when notification is clicked
@@ -156,9 +141,12 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
  title_clr | Optional | Title Color in HEX (default - ##000000)
  message_clr | Optional | Message Color in HEX (default - #000000)
  pt_bg | Required | Background Color in HEX (default - #FFFFFF)
- 
- ### One Bezel Template
- 
+
+### One Bezel Template
+
+<img src="https://user-images.githubusercontent.com/69451072/94699515-03c24200-0358-11eb-9b29-ec3d22e40890.png" width="300" />
+
+
  One Bezel Template Keys | Required | Description 
  ---:|:---:|:--- 
  notificationType | Required  | Value - `O`
@@ -174,6 +162,7 @@ We have 4 types of push notifications P, B, L and D which are identified by the 
  title_clr | Optional | Title Color in HEX (default - ##000000)
  message_clr | Optional | Message Color in HEX (default - #000000)
  pt_bg | Required | Background Color in HEX (default - #FFFFFF)
+ 
   
   
 ### Example data format to send for push notifications
