@@ -94,6 +94,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         getAppName()
         firebaseSubscribeToTopic(appName)
         firebaseSubscribeToTopic(appName+"Debug")
+        Log.d(TAG, "onCreate: "+Locale.getDefault().getDisplayCountry())
+        Log.d(TAG, "onCreate: "+Locale.getDefault().getDisplayLanguage())
+
     }
 
     override fun onNewToken(s: String) {
