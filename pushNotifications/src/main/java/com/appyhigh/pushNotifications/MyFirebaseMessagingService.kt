@@ -67,7 +67,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         Log.d(TAG, "onSendError: $e")
     }
 
-    private fun getAppName() {
+    fun getAppName() {
         val applicationInfo = applicationContext.applicationInfo
         val stringId = applicationInfo.labelRes
         if (stringId == 0) {
@@ -78,12 +78,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         }
     }
 
-    private fun firebaseSubscribeToTopic(appName: String){
+    fun firebaseSubscribeToTopic(appName: String){
         FirebaseMessaging.getInstance().subscribeToTopic(appName)
             .addOnCompleteListener { task ->
-                var msg = "subscribed to "+appName
+                var msg = "subscribed to $appName"
                 if (!task.isSuccessful) {
-                    msg = "not subscribed to "+appName
+                    msg = "not subscribed to $appName"
                 }
                 Log.d(TAG, msg)
             }
@@ -224,7 +224,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             val notificationBuilder: NotificationCompat.Builder =
                 NotificationCompat.Builder(applicationContext)
                     .setLargeIcon(image) /*Notification icon image*/
-                    .setSmallIcon(FCM_ICON)
                     .setContentTitle(title)
                     .setContentText(message)
                     .setStyle(
@@ -368,7 +367,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
             val notificationBuilder = NotificationCompat.Builder(this, id)
                 //                    .setLargeIcon(image)/*Notification icon image*/
-                .setSmallIcon(FCM_ICON)
                 .setContentTitle(title)
                 .setContentText(message) //                    .setStyle(new NotificationCompat.BigPictureStyle()
                 //                            .bigPicture(image))/*Notification with Image*/
@@ -618,8 +616,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         try {
             val rating: Int = intent.getIntExtra("rating", 0)
             Log.i("Result", "Got the data " + intent.getIntExtra("rating", 0))
+            var showWhich = true
             if (intent.hasExtra("rating")) {
                 if (rating == 5) {
+                    showWhich = false
                     val manager = ReviewManagerFactory.create(context)
                     val request = manager.requestReviewFlow()
                     request.addOnCompleteListener { task: Task<ReviewInfo?> ->
@@ -642,7 +642,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 }
             }
 
-            if (intent.hasExtra("which")) {
+            if (intent.hasExtra("which") && showWhich) {
                 val which = intent.getStringExtra("which")
                 val url = intent.getStringExtra("link")
                 val title = intent.getStringExtra("title")
