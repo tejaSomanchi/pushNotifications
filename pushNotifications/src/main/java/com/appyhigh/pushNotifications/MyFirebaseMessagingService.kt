@@ -89,6 +89,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             }
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        getAppName()
+        firebaseSubscribeToTopic(appName)
+        firebaseSubscribeToTopic(appName+"Debug")
+    }
+
     override fun onNewToken(s: String) {
         super.onNewToken(s)
         getAppName()
@@ -224,6 +231,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             val notificationBuilder: NotificationCompat.Builder =
                 NotificationCompat.Builder(applicationContext)
                     .setLargeIcon(image) /*Notification icon image*/
+                    .setSmallIcon(FCM_ICON)
                     .setContentTitle(title)
                     .setContentText(message)
                     .setStyle(
@@ -367,6 +375,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
             val notificationBuilder = NotificationCompat.Builder(this, id)
                 //                    .setLargeIcon(image)/*Notification icon image*/
+                .setSmallIcon(FCM_ICON)
                 .setContentTitle(title)
                 .setContentText(message) //                    .setStyle(new NotificationCompat.BigPictureStyle()
                 //                            .bigPicture(image))/*Notification with Image*/
