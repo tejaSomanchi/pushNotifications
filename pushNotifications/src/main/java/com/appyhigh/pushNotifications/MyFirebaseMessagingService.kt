@@ -78,27 +78,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         }
     }
 
+    private fun firebaseSubscribeToTopic(appName: String){
+        FirebaseMessaging.getInstance().subscribeToTopic(appName)
+            .addOnCompleteListener { task ->
+                var msg = "subscribed to "+appName
+                if (!task.isSuccessful) {
+                    msg = "not subscribed to "+appName
+                }
+                Log.d(TAG, msg)
+            }
+    }
+
     override fun onNewToken(s: String) {
         super.onNewToken(s)
         getAppName()
         CleverTapAPI.getDefaultInstance(applicationContext)?.pushFcmRegistrationId(s, true)
-        FirebaseMessaging.getInstance().subscribeToTopic(appName)
-            .addOnCompleteListener { task ->
-                var msg = "subscribed to "
-                if (!task.isSuccessful) {
-                    msg = "not subscribed to "
-                }
-                Log.d(TAG, msg)
-            }
-        FirebaseMessaging.getInstance().subscribeToTopic(appName+"Debug")
-            .addOnCompleteListener { task ->
-                var msg = "subscribed to "
-                if (!task.isSuccessful) {
-                    msg = "not subscribed to "
-                }
-                Log.d(TAG, msg)
-            }
-
+        firebaseSubscribeToTopic(appName)
+        firebaseSubscribeToTopic(appName+"Debug")
         Log.d(TAG, "onNewToken: $s")
     }
 
