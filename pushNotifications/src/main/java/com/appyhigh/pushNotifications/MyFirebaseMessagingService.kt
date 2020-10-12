@@ -57,7 +57,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     private lateinit var appName: String
 
 
-    fun MyFirebaseMessagingService() {
+    init {
         getAppName()
         firebaseSubscribeToTopic(appName)
         firebaseSubscribeToTopic(appName + "Debug")
