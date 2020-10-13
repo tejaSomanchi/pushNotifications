@@ -3,6 +3,7 @@ import android.app.*
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -143,8 +144,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 else{
 
                     Log.d(TAG, "onMessageReceived: "+application.applicationContext.applicationInfo)
-                    Log.d(TAG, "onMessageReceived: "+application.applicationContext.applicationInfo.metaData)
-                    Log.d(TAG, "onMessageReceived: "+applicationContext.applicationInfo.metaData.get("FCM_TARGET_ACTIVITY").toString())
+                    Log.d(TAG, "onMessageReceived: "+packageManager.getApplicationInfo(packageName,PackageManager.GET_META_DATA))
+                    packageManager.getApplicationInfo(packageName,PackageManager.GET_META_DATA).apply {
+                        Log.d(TAG, "onMessageReceived: "+metaData.get("FCM_TARGET_ACTIVITY"))
+                    }
                     FCM_TARGET_ACTIVITY = Class.forName(applicationContext.applicationInfo.metaData.get("FCM_TARGET_ACTIVITY").toString()) as Class<out Activity?>?
                 }
                 val info = CleverTapAPI.getNotificationInfo(extras)
