@@ -137,16 +137,25 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     extras.putString(key, value)
                 }
                 val notificationType = extras.getString("notificationType")
-                FCM_ICON = extras.getInt("small_icon", FCM_ICON)
-                if(extras.containsKey("target_activity")){
-                    FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity", "")) as Class<out Activity?>?
-                }
-                else if(FCM_TARGET_ACTIVITY == null){
-                    packageManager.getApplicationInfo(packageName,PackageManager.GET_META_DATA).apply {
-                        Log.d(TAG, "onMessageReceived: "+metaData.get("FCM_TARGET_ACTIVITY"))
-                        FCM_TARGET_ACTIVITY = Class.forName(metaData.get("FCM_TARGET_ACTIVITY").toString()) as Class<out Activity?>?
-                    }
 
+                packageManager.getApplicationInfo(packageName,PackageManager.GET_META_DATA).apply {
+                    // setting the small icon for notification
+                    if(extras.containsKey("small_icon")){
+                        FCM_ICON = extras.getInt("small_icon", FCM_ICON)
+                    }
+                    else if(metaData.containsKey("FCM_ICON")){
+                        FCM_ICON = metaData.getInt("FCM_ICON")
+                    }
+                   //getting and setting the target activity that is to be opened on notification click
+                    if(extras.containsKey("target_activity")){
+                        FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity", "")) as Class<out Activity?>?
+                    }
+                    else if(FCM_TARGET_ACTIVITY == null) {
+                        Log.d(TAG, "onMessageReceived: " + metaData.get("FCM_TARGET_ACTIVITY"))
+                        FCM_TARGET_ACTIVITY = Class.forName(
+                            metaData.get("FCM_TARGET_ACTIVITY").toString()
+                        ) as Class<out Activity?>?
+                    }
                 }
                 val info = CleverTapAPI.getNotificationInfo(extras)
                 if (info.fromCleverTap) {
