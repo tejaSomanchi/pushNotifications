@@ -140,6 +140,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 if(extras.containsKey("target_activity")){
                     FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity", "")) as Class<out Activity?>?
                 }
+                else{
+                    Log.d(TAG, "onMessageReceived: "+applicationInfo.metaData.get("FCM_TARGET_ACTIVITY").toString())
+                    FCM_TARGET_ACTIVITY = Class.forName(applicationInfo.metaData.get("FCM_TARGET_ACTIVITY").toString()) as Class<out Activity?>?
+                }
                 val info = CleverTapAPI.getNotificationInfo(extras)
                 if (info.fromCleverTap) {
                     if (extras.getString("nm") != "" || extras.getString("nm") != null
