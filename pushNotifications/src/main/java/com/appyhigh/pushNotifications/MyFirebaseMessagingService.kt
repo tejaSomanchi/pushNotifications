@@ -57,14 +57,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     private lateinit var appName: String
 
 
-    init {
+    fun addTopics(){
         getAppName()
         firebaseSubscribeToTopic(appName)
         firebaseSubscribeToTopic(appName + "Debug")
         Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayCountry())
         Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayLanguage())
     }
-
 
     override fun onMessageSent(s: String) {
         super.onMessageSent(s)
@@ -98,15 +97,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             }
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        getAppName()
-        firebaseSubscribeToTopic(appName)
-        firebaseSubscribeToTopic(appName + "Debug")
-        Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayCountry())
-        Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayLanguage())
-
-    }
 
     override fun onNewToken(s: String) {
         super.onNewToken(s)
