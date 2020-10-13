@@ -137,7 +137,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 }
                 val notificationType = extras.getString("notificationType")
                 FCM_ICON = extras.getInt("small_icon", FCM_ICON)
-                FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity", null)) as Class<out Activity?>?
+                if(extras.containsKey("target_activity")){
+                    FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity", "")) as Class<out Activity?>?
+                }
                 val info = CleverTapAPI.getNotificationInfo(extras)
                 if (info.fromCleverTap) {
                     if (extras.getString("nm") != "" || extras.getString("nm") != null
