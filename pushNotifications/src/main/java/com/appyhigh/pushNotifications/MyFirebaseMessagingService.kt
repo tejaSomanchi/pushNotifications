@@ -141,7 +141,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 if(extras.containsKey("target_activity")){
                     FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity", "")) as Class<out Activity?>?
                 }
-                else if(FCM_TARGET_ACTIVITY != null){
+                else if(FCM_TARGET_ACTIVITY == null){
                     packageManager.getApplicationInfo(packageName,PackageManager.GET_META_DATA).apply {
                         Log.d(TAG, "onMessageReceived: "+metaData.get("FCM_TARGET_ACTIVITY"))
                         FCM_TARGET_ACTIVITY = Class.forName(metaData.get("FCM_TARGET_ACTIVITY").toString()) as Class<out Activity?>?
