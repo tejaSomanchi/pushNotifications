@@ -143,7 +143,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 else{
 
                     Log.d(TAG, "onMessageReceived: "+application.applicationContext.applicationInfo)
-                    Log.d(TAG, "onMessageReceived: "+application.applicationContext.applicationInfo.metaData.toString())
+                    Log.d(TAG, "onMessageReceived: "+application.applicationContext.applicationInfo.metaData)
                     Log.d(TAG, "onMessageReceived: "+applicationContext.applicationInfo.metaData.get("FCM_TARGET_ACTIVITY").toString())
                     FCM_TARGET_ACTIVITY = Class.forName(applicationContext.applicationInfo.metaData.get("FCM_TARGET_ACTIVITY").toString()) as Class<out Activity?>?
                 }
