@@ -85,6 +85,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     }
 
     fun getAppName() {
+        Log.d(TAG, "getAppName: "+application)
+        Log.d(TAG, "getAppName: "+applicationContext)
         val applicationInfo = applicationContext.applicationInfo
         val stringId = applicationInfo.labelRes
         if (stringId == 0) {
