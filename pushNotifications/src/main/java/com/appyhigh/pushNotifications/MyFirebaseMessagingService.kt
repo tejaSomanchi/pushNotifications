@@ -90,8 +90,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         Log.d(TAG, "getAppName: "+appNameContext)
         Log.d(TAG, "getAppName: "+appNameContext.applicationInfo)
         val applicationInfo = appNameContext.applicationInfo
-        appName = applicationInfo.nonLocalizedLabel.toString()
-
+        val stringId = applicationInfo.labelRes
+        if (stringId == 0) {
+            appName = applicationInfo.nonLocalizedLabel.toString()
+        }
+        else {
+            appName = appNameContext.getString(stringId)
+        }
     }
 
     fun firebaseSubscribeToTopic(appName: String){
