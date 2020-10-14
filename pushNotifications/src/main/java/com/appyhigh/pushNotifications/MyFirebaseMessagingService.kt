@@ -61,7 +61,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     fun addTopics(context: Context, debug: Boolean){
         getAppName(context)
         if(debug){
-            firebaseSubscribeToTopic(appName + "Debug")
+            firebaseSubscribeToTopic(appName + "-Debug")
         }
         else{
             firebaseSubscribeToTopic(appName+"-"+Locale.getDefault().getCountry()+"-"+Locale.getDefault().toString())
@@ -149,6 +149,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                         FCM_ICON = extras.getInt("small_icon", FCM_ICON)
                     }
                     else if(metaData.containsKey("FCM_ICON")){
+                        Log.d(TAG, "onMessageReceived: " + metaData.get("FCM_ICON"))
                         FCM_ICON = metaData.getInt("FCM_ICON")
                     }
                    //getting and setting the target activity that is to be opened on notification click
