@@ -102,6 +102,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     Log.d(TAG, "firebaseSubscribeToTopic inside: "+appName)
                 }
         }catch (e: Exception){
+            e.printStackTrace()
             Log.d(TAG, "firebaseSubscribeToTopic: "+e)
         }
 
