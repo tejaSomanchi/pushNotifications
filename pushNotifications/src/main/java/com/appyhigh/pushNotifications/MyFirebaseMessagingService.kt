@@ -56,9 +56,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     private var inAppActivityToOpen: Class<out Activity?>? = null
     private lateinit var inAppIntentParam: String
     private lateinit var appName: String
+    private lateinit var appNameContext: Context
 
 
-    fun addTopics(debug: Boolean){
+    fun addTopics(context: Context, debug: Boolean){
+        appNameContext = context
         getAppName()
         if(debug){
             firebaseSubscribeToTopic(appName + "Debug")
@@ -85,9 +87,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     }
 
     fun getAppName() {
-        Log.d(TAG, "getAppName: "+application)
-        Log.d(TAG, "getAppName: "+applicationContext)
-        val applicationInfo = applicationContext.applicationInfo
+        Log.d(TAG, "getAppName: "+appNameContext)
+        Log.d(TAG, "getAppName: "+appNameContext.applicationInfo)
+        val applicationInfo = appNameContext.applicationInfo
         val stringId = applicationInfo.labelRes
         if (stringId == 0) {
             appName = applicationInfo.nonLocalizedLabel.toString()
