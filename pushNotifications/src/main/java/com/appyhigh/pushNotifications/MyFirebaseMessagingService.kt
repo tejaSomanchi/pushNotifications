@@ -66,14 +66,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             firebaseSubscribeToTopic(appName + "Debug")
         }
         else{
-            firebaseSubscribeToTopic(appName)
+            firebaseSubscribeToTopic(appName+"-"+Locale.getDefault().getCountry()+"-"+Locale.getDefault().toString())
         }
-        Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayCountry())
-        Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayLanguage())
-        Log.d(TAG, "onCreate: " +  Locale.getDefault().getLanguage())
-        Log.d(TAG, "onCreate: " + Locale.getDefault().getCountry())
-        Log.d(TAG, "onCreate: " +Locale.getDefault().getISO3Country())
-        Log.d(TAG, "onCreate: " +Locale.getDefault().toString())
     }
 
     override fun onMessageSent(s: String) {
