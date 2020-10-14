@@ -90,15 +90,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     }
 
     fun firebaseSubscribeToTopic(appName: String){
-        FirebaseMessaging.getInstance().subscribeToTopic(appName)
-            .addOnCompleteListener { task ->
-                var msg = "subscribed to $appName"
-                if (!task.isSuccessful) {
-                    msg = "not subscribed to $appName"
+        try{
+            FirebaseMessaging.getInstance().subscribeToTopic(appName)
+                .addOnCompleteListener { task ->
+                    var msg = "subscribed to $appName"
+                    if (!task.isSuccessful) {
+                        msg = "not subscribed to $appName"
+                    }
+
+                    Log.d(TAG, msg)
+                    Log.d(TAG, "firebaseSubscribeToTopic inside: "+appName)
                 }
-                Log.d(TAG, msg)
-                Log.d(TAG, "firebaseSubscribeToTopic inside: "+appName)
-            }
+        }catch (e: Exception){
+            Log.d(TAG, "firebaseSubscribeToTopic: "+e)
+        }
+
         Log.d(TAG, "firebaseSubscribeToTopic: "+appName)
     }
 
