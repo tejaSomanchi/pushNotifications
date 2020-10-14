@@ -56,12 +56,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     private var inAppActivityToOpen: Class<out Activity?>? = null
     private lateinit var inAppIntentParam: String
     private lateinit var appName: String
-    private lateinit var appNameContext: Context
 
 
     fun addTopics(context: Context, debug: Boolean){
-        appNameContext = context
-        getAppName()
+        getAppName(context)
         if(debug){
             firebaseSubscribeToTopic(appName + "Debug")
         }
@@ -80,20 +78,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         Log.d(TAG, "onSendError: $e")
     }
 
-    fun getAppName() {
-        Log.d(TAG, "getAppName: "+appNameContext)
-        Log.d(TAG, "getAppName: "+appNameContext.applicationInfo)
-        val applicationInfo = appNameContext.applicationInfo
+    fun getAppName(context: Context) {
+        val applicationInfo = context.applicationInfo
         val stringId = applicationInfo.labelRes
         if (stringId == 0) {
             appName = applicationInfo.nonLocalizedLabel.toString()
         }
         else {
-            appName = appNameContext.getString(stringId)
+            appName = context.getString(stringId)
         }
     }
 
     fun firebaseSubscribeToTopic(appName: String){
+        Log.d(TAG, "firebaseSubscribeToTopic: "+appName)
         FirebaseMessaging.getInstance().subscribeToTopic(appName)
             .addOnCompleteListener { task ->
                 var msg = "subscribed to $appName"
@@ -102,15 +99,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 }
                 Log.d(TAG, msg)
             }
+        Log.d(TAG, "firebaseSubscribeToTopic: "+appName)
     }
 
 
     override fun onNewToken(s: String) {
         super.onNewToken(s)
-        getAppName()
         CleverTapAPI.getDefaultInstance(applicationContext)?.pushFcmRegistrationId(s, true)
-        firebaseSubscribeToTopic(appName)
-        firebaseSubscribeToTopic(appName + "Debug")
         Log.d(TAG, "onNewToken: $s")
     }
 
