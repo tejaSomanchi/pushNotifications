@@ -58,12 +58,20 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     private lateinit var appName: String
 
 
-    fun addTopics(){
+    fun addTopics(debug: Boolean){
         getAppName()
-        firebaseSubscribeToTopic(appName)
-        firebaseSubscribeToTopic(appName + "Debug")
+        if(debug){
+            firebaseSubscribeToTopic(appName + "Debug")
+        }
+        else{
+            firebaseSubscribeToTopic(appName)
+        }
         Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayCountry())
         Log.d(TAG, "onCreate: " + Locale.getDefault().getDisplayLanguage())
+        Log.d(TAG, "onCreate: " +  Locale.getDefault().getLanguage())
+        Log.d(TAG, "onCreate: " + Locale.getDefault().getCountry())
+        Log.d(TAG, "onCreate: " +Locale.getDefault().getISO3Country())
+        Log.d(TAG, "onCreate: " +Locale.getDefault().toString())
     }
 
     override fun onMessageSent(s: String) {
