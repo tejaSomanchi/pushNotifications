@@ -39,7 +39,7 @@
             android:layout_alignStart="@id/title"
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@+id/large_icon"
-            android:text="message message "
+            android:text="This is another tutorial of the Angular App.The Bezel template ensures that the background image covers the entire available surface area of the push notification. All the text is overlayed on the image.<br/>(Expanded and unexpanded example)<br/> "
             android:textAppearance="@style/TextAppearance.Compat.Notification"
             android:layout_alignLeft="@id/title"
             android:layout_alignParentLeft="true"
