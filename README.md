@@ -67,14 +67,14 @@ implementation 'com.github.
 
 5.Add the following lines inside *application* tag to your *AndroidManifest.xml*.
 
-FCM_TARGET_ACTIVITY - default activity that should be opened when notification is clicked.
-
-FCM_ICON - notification icon that needs be displayed in the push notification
-
 ```xml
 <meta-data android:name="FCM_TARGET_ACTIVITY" android:value="**your_target_activity**" />
 <meta-data android:name="FCM_ICON" android:resource="**your_app_icon**" />
 ```
+
+FCM_TARGET_ACTIVITY - default activity that should be opened when notification is clicked.
+
+FCM_ICON - notification icon that needs be displayed in the push notification
 
 
 # Template Types
