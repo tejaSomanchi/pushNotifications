@@ -58,9 +58,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     private lateinit var appName: String
 
 
-    fun addTopics(context: Context, debug: Boolean){
+    fun addTopics(context: Context,isDebug: Boolean){
         getAppName(context)
-        if(debug){
+        if(isDebug){
             firebaseSubscribeToTopic(appName + "-Debug")
         }
         else{
