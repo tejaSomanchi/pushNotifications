@@ -64,7 +64,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             firebaseSubscribeToTopic(appName + "-Debug")
         }
         else{
-            firebaseSubscribeToTopic(appName+"-"+Locale.getDefault().getCountry()+"-"+Locale.getDefault().toString())
+            firebaseSubscribeToTopic(appName+"-"+Locale.getDefault().getCountry()+"-"+Locale.getDefault().getLanguage())
         }
     }
 
