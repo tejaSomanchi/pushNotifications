@@ -145,10 +145,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
                 packageManager.getApplicationInfo(packageName,PackageManager.GET_META_DATA).apply {
                     // setting the small icon for notification
-                    if(extras.containsKey("small_icon")){
-                        FCM_ICON = extras.getInt("small_icon", FCM_ICON)
-                    }
-                    else if(metaData.containsKey("FCM_ICON")){
+                    if(metaData.containsKey("FCM_ICON")){
                         Log.d(TAG, "onMessageReceived: " + metaData.get("FCM_ICON"))
                         FCM_ICON = metaData.getInt("FCM_ICON")
                     }

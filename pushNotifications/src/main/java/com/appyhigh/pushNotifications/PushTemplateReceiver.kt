@@ -304,9 +304,5 @@ class PushTemplateReceiver : BroadcastReceiver() {
         image = extras!!.getString("image")
         large_icon = extras!!.getString("large_icon")
         small_icon_clr = extras!!.getString("small_icon_clr")
-        FCM_ICON = extras.getInt("small_icon",FCM_ICON)
-        if(extras.containsKey("target_activity")){
-            FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity", "")) as Class<out Activity?>?
-        }
     }
 }
