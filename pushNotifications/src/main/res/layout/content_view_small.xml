@@ -27,6 +27,7 @@
             android:text="title"
             android:textAppearance="@style/TextAppearance.Compat.Notification.Title"
             android:layout_alignParentLeft="true"
+            android:maxLines="1"
             android:layout_toLeftOf="@+id/large_icon"
             android:layout_marginRight="@dimen/metadata_title_margin_horizontal" />
 

@@ -222,7 +222,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
     private fun sendNotification(extras: Bundle) {
         try {
-            Log.d(TAG, "onMessageReceived: in else part 2")
             var message = extras.getString("message")
             var image = getBitmapfromUrl(extras.getString("image"))
             var link = extras.getString("link")
@@ -250,8 +249,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
             )
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-            Log.d(TAG, "onMessageReceived: in else part 3")
-            Log.d(TAG, "sendNotification: " + title + " " + message)
             val notificationBuilder: NotificationCompat.Builder =
                 NotificationCompat.Builder(applicationContext)
                     .setLargeIcon(image) /*Notification icon image*/
