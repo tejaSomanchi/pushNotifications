@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/padding_horizontal"
     android:paddingRight="@dimen/padding_horizontal"
-    android:paddingBottom="2dp" >
+    android:paddingBottom="@dimen/padding_vertical" >
 
 
     <!--    <include-->
