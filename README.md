@@ -65,6 +65,17 @@ implementation 'com.github.
 </receiver>
 ```
 
+5.Add the following lines inside *application* tag to your *AndroidManifest.xml*.
+
+FCM_TARGET_ACTIVITY - default activity that should be opened when notification is clicked.
+FCM_ICON - notification icon that needs be displayed in the push notification
+
+```xml
+<meta-data android:name="FCM_TARGET_ACTIVITY" android:value="**your_target_activity**" />
+<meta-data android:name="FCM_ICON" android:resource="**your_app_icon**" />
+```
+
+
 # Template Types
 
 [(Back to top)](#table-of-contents)
@@ -84,15 +95,12 @@ Basic Template is the basic push notification received on apps.
 
 Basic Template Keys | Required | Description 
  ---:|:---:|:---| 
- target_activity | Required | Activity that should be opened when notification is clicked
  title | Required | Title 
  message | Required | Message 
  messageBody | Optional | Message line when Notification is expanded
  image | Optional | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
- large_icon | Optional | Large Icon 
- small_icon | Optional | Small Icon
  
 
 
@@ -105,18 +113,17 @@ Rating template lets your users give you feedback, this feedback is captured and
 Rating Template Keys | Required | Description 
  ---:|:---:|:--- 
  notificationType | Required  | Value - `R`
- target_activity | Required | Activity that should be opened when notification is clicked
  title | Required | Title 
  message | Required | Message 
  messageBody | Optional | Message line when Notification is expanded
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
- small_icon | Optional | Small Icon
  title_clr | Optional | Title Color in HEX (default - ##000000)
  message_clr | Optional | Message Color in HEX (default - #000000)
  pt_bg | Required | Background Color in HEX (default - #FFFFFF)
 
+1.Maximum number of lines for message in collapsed view - 1
 
 ## Bezel Template
 
@@ -129,18 +136,20 @@ The Bezel template ensures that the background image covers the entire available
 Zero Bezel Template Keys | Required | Description 
  ---:|:---:|:--- 
  notificationType | Required  | Value - `Z`
- target_activity | Required | Activity that should be opened when notification is clicked
  title | Required | Title 
  message | Required | Message 
  messageBody | Optional | Message line when Notification is expanded
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
- small_icon | Optional | Small Icon
  meta_clr | Optional | Color for appname,timestamp in HEX (default - #A6A6A6)
  title_clr | Optional | Title Color in HEX (default - ##000000)
  message_clr | Optional | Message Color in HEX (default - #000000)
  pt_bg | Required | Background Color in HEX (default - #FFFFFF)
+ 
+ *Note :**
+ 
+ 1.Maximum number of lines for message in collapsed view - 2
 
 ### One Bezel Template
 
@@ -150,20 +159,21 @@ Zero Bezel Template Keys | Required | Description
  One Bezel Template Keys | Required | Description 
  ---:|:---:|:--- 
  notificationType | Required  | Value - `O`
- target_activity | Required | Activity that should be opened when notification is clicked
  title | Required | Title 
  message | Required | Message 
  messageBody | Optional | Message line when Notification is expanded
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
- small_icon | Optional | Small Icon
  meta_clr | Optional | Color for appname,timestamp in HEX (default - #A6A6A6)
  title_clr | Optional | Title Color in HEX (default - ##000000)
  message_clr | Optional | Message Color in HEX (default - #000000)
  pt_bg | Required | Background Color in HEX (default - #FFFFFF)
  
-  
+ **Note :**
+ 
+ 1.Maximum number of lines for message in collapsed view - 3
+ 
   
 ### Example data format to send for push notifications
 ```json
@@ -183,6 +193,8 @@ Zero Bezel Template Keys | Required | Description
 
 [(Back to top)](#table-of-contents)
 
+## Check for Notifications
+
 1.Call *checkForNotifications* method in your MainActivity to recieve data from notifications
 ```Kotlin
 checkForNotifications(context: Context, intent: Intent, webViewActivity: Class<out Activity?>?,activityToOpen: Class<out Activity?>?,intentParam: String)
@@ -196,6 +208,22 @@ checkForNotifications(context: Context, intent: Intent, webViewActivity: Class<o
 ### Example
 ```Kotlin
 MyFirebaseMessaging.checkForNotifications(context = this, intent = intent, webViewActivity = WebViewActivity::class.java, activityToOpen = MainActivity::class.java,"")
+```
+
+## Subscribe to Topics
+
+1.Call *addTopics* method in your MainActivity to subscribe topics for push notifications.
+```Kotlin
+addTopics(context: Context, isDebug: Boolean)
+```
+**Note:**
+
+1.Name format of the topic subscribed for release variant - 'appName-country-language'( Ex - 'WhatsApp-IN-en' )
+2.Name format of the topic subscribed for debug varaint - 'appName-Debug' ( Ex - 'WhatsApp-Debug' )
+
+### Example
+```Kotlin
+ myFirebaseMessagingService.addTopics(context = this, isDebug = BuildConfig.DEBUG)
 ```
 
 # InApp Notifications
