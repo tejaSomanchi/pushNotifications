@@ -400,7 +400,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 .setContentTitle(title)
                 .setContentText(message) //                    .setStyle(new NotificationCompat.BigPictureStyle()
                 //                            .bigPicture(image))/*Notification with Image*/
-                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                 .setCustomContentView(contentViewSmall)
                 .setCustomBigContentView(contentViewRating)
                 .setAutoCancel(true)
