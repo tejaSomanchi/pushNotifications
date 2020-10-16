@@ -109,7 +109,7 @@ Basic Template Keys | Required | Description
  messageBody | Optional | Message line when Notification is expanded
  image | Optional | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
- link | Required if 'which' is entered | url for 'which' type
+ url | Required if 'which' is entered | url for 'which' type
  
 
 
@@ -127,11 +127,11 @@ Rating Template Keys | Required | Description
  messageBody | Optional | Message line when Notification is expanded
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
- link | Required if 'which' is entered | url for 'which' type
+ url | Required if 'which' is entered | url for 'which' type
  title_clr | Optional | Title Color in HEX (default - #A6A6A6)
  message_clr | Optional | Message Color in HEX (default - #A6A6A6)
-
-1.Maximum number of lines for message in collapsed view - 1
+ 
+**Note :** Maximum number of lines for message in collapsed view - 1
 
 ## Bezel Template
 
@@ -149,15 +149,13 @@ Zero Bezel Template Keys | Required | Description
  messageBody | Optional | Message line when Notification is expanded
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
- link | Required if 'which' is entered | url for 'which' type
+ url | Required if 'which' is entered | url for 'which' type
  meta_clr | Optional | Color for appname,timestamp in HEX (default - #A6A6A6)
  title_clr | Optional | Title Color in HEX (default - ##000000)
  message_clr | Optional | Message Color in HEX (default - #000000)
- pt_bg | Required | Background Color in HEX (default - #FFFFFF)
+ pt_bg | Optional | Background Color in HEX (default - #FFFFFF)
  
- **Note :**
- 
- 1.Maximum number of lines for message in collapsed view - 2
+ **Note :** Maximum number of lines for message in collapsed view - 2
 
 ### One Bezel Template
 
@@ -172,15 +170,13 @@ Zero Bezel Template Keys | Required | Description
  messageBody | Optional | Message line when Notification is expanded
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
- link | Required if 'which' is entered | url for 'which' type
+ url | Required if 'which' is entered | url for 'which' type
  meta_clr | Optional | Color for appname,timestamp in HEX (default - #A6A6A6)
  title_clr | Optional | Title Color in HEX (default - ##000000)
  message_clr | Optional | Message Color in HEX (default - #000000)
- pt_bg | Required | Background Color in HEX (default - #FFFFFF)
+ pt_bg | Optional | Background Color in HEX (default - #FFFFFF)
  
- **Note :**
- 
- 1.Maximum number of lines for message in collapsed view - 3
+ **Note :** Maximum number of lines for message in collapsed view - 3
  
   
 ### Example data format to send for push notifications
@@ -228,7 +224,7 @@ addTopics(context: Context, appName: String, isDebug: Boolean)
 
 1.All the parameters are required.
 
-2.Empty String - "" or null value should be given as a default value for appName so that your application name is taken in library. 
+2.Empty String - "" or null value should be given as a default value for appName so that your application name in lowercase is taken in library. 
 
 3.Name format of the topic subscribed for release variant - 'appName','appName-country-language'( Ex - 'WhatsApp-IN-en' )
 
