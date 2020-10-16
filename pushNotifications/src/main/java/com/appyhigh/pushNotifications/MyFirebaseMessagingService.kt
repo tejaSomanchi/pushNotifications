@@ -680,7 +680,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
             if (intent.hasExtra("which") && showWhich) {
                 val which = intent.getStringExtra("which")
-                val url = intent.getStringExtra("link")
+                val url = intent.getStringExtra("url")
                 val title = intent.getStringExtra("title")
 
                 when (which) {
@@ -718,7 +718,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     "L" -> {
                         try {
                             val intent1 = Intent(context, webViewActivityToOpen)
-                            intent1.putExtra("link", url)
+                            intent1.putExtra("url", url)
                             intent1.putExtra("title", title)
                             context.startActivity(intent1)
                         } catch (e: Exception) {
@@ -817,7 +817,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         try {
             if (extras.containsKey("which")) {
                 val which = extras.getString("which")
-                val url = extras.getString("link")
+                val url = extras.getString("url")
                 val title = extras.getString("title")
 
                 when (which) {
@@ -855,7 +855,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     "L" -> {
                         try {
                             val intent1 = Intent(context, webViewActivityToOpen)
-                            intent1.putExtra("link", url)
+                            intent1.putExtra("url", url)
                             intent1.putExtra("title", title)
                             context.startActivity(intent1)
                         } catch (e: Exception) {
