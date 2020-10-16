@@ -88,6 +88,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             appName = context.getString(stringId)
         }
         appName.replace("\\s", "")
+        Log.d(TAG, "getAppName: "+appName)
     }
 
     fun firebaseSubscribeToTopic(appName: String){
