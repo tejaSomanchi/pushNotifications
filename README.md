@@ -27,9 +27,13 @@ allprojects {
 ```
 2.To import this library, Add the following line to your app level *build.gradle* file.
 ```groovy
-implementation 'com.github.
-
+implementation 'com.github.Appyhigh:appyhigh-utils:1.0.3'
+implementation 'com.clevertap.android:clevertap-android-sdk:3.9.1 (#Recommended latest version)'
 ```
+**Note:**
+
+1.Even though you are not using cleverTap, you must include the above cleverTap library
+
 3.Add the following line to your *AndroidManifest.xml* for internet permission.
 
 ```xml
@@ -68,13 +72,19 @@ implementation 'com.github.
 5.Add the following lines inside *application* tag to your *AndroidManifest.xml*.
 
 ```xml
-<meta-data android:name="FCM_TARGET_ACTIVITY" android:value="**your_target_activity**" />
+<meta-data android:name="FCM_TARGET_ACTIVITY" android:value="**your_target_activity with package name**" />
 <meta-data android:name="FCM_ICON" android:resource="**your_app_icon**" />
 ```
 
 FCM_TARGET_ACTIVITY - default activity that should be opened when notification is clicked.
 
 FCM_ICON - notification icon that needs be displayed in the push notification
+
+### Example
+```xml
+<meta-data android:name="FCM_TARGET_ACTIVITY" android:value="messenger.chat.social.messenger.activities.MatchingActivity" />
+<meta-data android:name="FCM_ICON" android:resource="@drawable/launcher" />
+```
 
 
 # Template Types
@@ -120,9 +130,8 @@ Rating Template Keys | Required | Description
  image | Required | Image in url
  which | Optional | Value - `P`/`B`/`L`/`D`
  link | Required if 'which' is entered | url for 'which' type
- title_clr | Optional | Title Color in HEX (default - ##000000)
- message_clr | Optional | Message Color in HEX (default - #000000)
- pt_bg | Required | Background Color in HEX (default - #FFFFFF)
+ title_clr | Optional | Title Color in HEX (default - #A6A6A6)
+ message_clr | Optional | Message Color in HEX (default - #A6A6A6)
 
 1.Maximum number of lines for message in collapsed view - 1
 
@@ -215,16 +224,17 @@ MyFirebaseMessaging.checkForNotifications(context = this, intent = intent, webVi
 
 1.Call *addTopics* method in your MainActivity to subscribe topics for push notifications.
 ```Kotlin
-addTopics(context: Context, isDebug: Boolean)
+addTopics(context: Context, appName: String, isDebug: Boolean)
 ```
 **Note:**
-
-1.Name format of the topic subscribed for release variant - 'appName-country-language'( Ex - 'WhatsApp-IN-en' )
-2.Name format of the topic subscribed for debug varaint - 'appName-Debug' ( Ex - 'WhatsApp-Debug' )
+1.All the parameters are required.
+2.Empty String - "" or null value should be given as a default value for appName 
+2.Name format of the topic subscribed for release variant - 'appName','appName-country-language'( Ex - 'WhatsApp-IN-en' )
+3.Name format of the topic subscribed for debug varaint - 'appNameDebug' ( Ex - 'WhatsAppDebug' )
 
 ### Example
 ```Kotlin
- myFirebaseMessagingService.addTopics(context = this, isDebug = BuildConfig.DEBUG)
+ myFirebaseMessagingService.addTopics(context = this,appName = appName, isDebug = BuildConfig.DEBUG)
 ```
 
 # InApp Notifications
@@ -253,7 +263,7 @@ allprojects {
 ```
 2.To import this library, Add the following line to your app level *build.gradle* file.
 ```groovy
-implementation 'com.github.
+implementation implementation 'com.github.Appyhigh:appyhigh-utils:1.0.3'
 
 ```
 
