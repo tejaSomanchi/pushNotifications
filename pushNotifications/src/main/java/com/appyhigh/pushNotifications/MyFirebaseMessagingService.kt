@@ -87,7 +87,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         else {
             appName = context.getString(stringId)
         }
-        appName.replace("\\s".toRegex(), "")
+        Log.d(TAG, appName.replace("\\s", ""))
+        appName = appName.replace("\\s".toRegex(), "")
         Log.d(TAG, "getAppName: "+appName)
     }
 
