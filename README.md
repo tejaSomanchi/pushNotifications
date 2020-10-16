@@ -226,9 +226,12 @@ addTopics(context: Context, appName: String, isDebug: Boolean)
 ```
 **Note:**
 1.All the parameters are required.
-2.Empty String - "" or null value should be given as a default value for appName 
-2.Name format of the topic subscribed for release variant - 'appName','appName-country-language'( Ex - 'WhatsApp-IN-en' )
-3.Name format of the topic subscribed for debug varaint - 'appNameDebug' ( Ex - 'WhatsAppDebug' )
+
+2.Empty String - "" or null value should be given as a default value for appName so that your application name is taken in library. 
+
+3.Name format of the topic subscribed for release variant - 'appName','appName-country-language'( Ex - 'WhatsApp-IN-en' )
+
+4.Name format of the topic subscribed for debug varaint - 'appNameDebug' ( Ex - 'WhatsAppDebug' )
 
 ### Example
 ```Kotlin
