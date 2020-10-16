@@ -155,7 +155,7 @@ Zero Bezel Template Keys | Required | Description
  message_clr | Optional | Message Color in HEX (default - #000000)
  pt_bg | Required | Background Color in HEX (default - #FFFFFF)
  
- *Note :**
+ **Note :**
  
  1.Maximum number of lines for message in collapsed view - 2
 
@@ -225,6 +225,7 @@ MyFirebaseMessaging.checkForNotifications(context = this, intent = intent, webVi
 addTopics(context: Context, appName: String, isDebug: Boolean)
 ```
 **Note:**
+
 1.All the parameters are required.
 
 2.Empty String - "" or null value should be given as a default value for appName so that your application name is taken in library. 
