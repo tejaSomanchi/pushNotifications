@@ -59,7 +59,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
 
     fun addTopics(context: Context, appName: String, isDebug: Boolean){
-        if(appName == null || appName.equals("")){
+        if(appName.equals("")){
             getAppName(context)
         }
         else {
@@ -94,6 +94,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             appName = context.getString(stringId)
         }
         appName = appName.replace("\\s".toRegex(), "")
+        appName = appName.toLowerCase()
     }
 
     fun firebaseSubscribeToTopic(appName: String){

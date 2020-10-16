@@ -224,7 +224,7 @@ addTopics(context: Context, appName: String, isDebug: Boolean)
 
 1.All the parameters are required.
 
-2.Empty String - "" or null value should be given as a default value for appName so that your application name in lowercase is taken in library. 
+2.Empty String - "" should be given as a default value for appName so that your application name in lowercase is taken in library. 
 
 3.Name format of the topic subscribed for release variant - 'appName','appName-country-language'( Ex - 'WhatsApp-IN-en' )
 
