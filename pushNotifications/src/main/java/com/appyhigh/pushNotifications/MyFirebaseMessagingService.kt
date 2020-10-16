@@ -230,7 +230,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         try {
             var message = extras.getString("message")
             var image = getBitmapfromUrl(extras.getString("image"))
-            var link = extras.getString("link")
+            var url = extras.getString("url")
             var which = extras.getString("which")
             var title = extras.getString("title")
             if(message==null || message.equals("")){
@@ -246,7 +246,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra("which", which)
-            intent.putExtra("link", link)
+            intent.putExtra("url", url)
             intent.putExtra("title", title)
             val pendingIntent = PendingIntent.getActivity(
                 applicationContext,
