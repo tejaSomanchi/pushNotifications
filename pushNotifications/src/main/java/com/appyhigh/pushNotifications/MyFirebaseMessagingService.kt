@@ -720,6 +720,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                             val intent1 = Intent(context, webViewActivityToOpen)
                             intent1.putExtra("url", url)
                             intent1.putExtra("title", title)
+                            intent1.putExtra("which", which)
                             context.startActivity(intent1)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -729,6 +730,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                         try {
                             val intent1 = Intent(context, activityToOpen)
                             intent1.putExtra(intentParam, url)
+                            intent1.putExtra("url", url)
+                            intent1.putExtra("title", title)
+                            intent1.putExtra("which", which)
                             context.startActivity(intent1)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -855,8 +859,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     "L" -> {
                         try {
                             val intent1 = Intent(context, webViewActivityToOpen)
-                            intent1.putExtra("url", url)
-                            intent1.putExtra("title", title)
+                            intent1.putExtras(extras)
                             context.startActivity(intent1)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -866,6 +869,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                         try {
                             val intent1 = Intent(context, activityToOpen)
                             intent1.putExtra(intentParam, url)
+                            intent1.putExtras(extras)
                             context.startActivity(intent1)
                         } catch (e: Exception) {
                             e.printStackTrace()
