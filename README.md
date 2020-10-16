@@ -30,9 +30,7 @@ allprojects {
 implementation 'com.github.Appyhigh:appyhigh-utils:1.0.3'
 implementation 'com.clevertap.android:clevertap-android-sdk:3.9.1 (#Recommended latest version)'
 ```
-**Note:**
-
-1.Even though you are not using cleverTap, you must include the above cleverTap library
+**Note:** Even though you are not using cleverTap, you must include the above cleverTap library
 
 3.Add the following line to your *AndroidManifest.xml* for internet permission.
 
