@@ -254,9 +254,9 @@ checkForNotifications(context: Context, intent: Intent, webViewActivity: Class<o
 
 2.Empty string - `""` should be given as default value for intentParam.
 
-3. You can get the url of the link from getIntent() in activity using key - 'link'.
+3.You can get the url of the link from getIntent() in activity using key - 'link'.
 
-4. You can see the logs of the library using tag - 'FirebaseMessageService'
+4.You can see the logs of the library using tag - 'FirebaseMessageService'
 
 ### Example
 ```Kotlin
