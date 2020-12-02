@@ -257,8 +257,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
             )
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-            val notificationBuilder: NotificationCompat.Builder =
-                NotificationCompat.Builder(applicationContext)
+            var notificationBuilder: NotificationCompat.Builder;
+            if(image == null || image.equals("")){
+                notificationBuilder =  NotificationCompat.Builder(applicationContext)
+                    .setLargeIcon(image) /*Notification icon image*/
+                    .setSmallIcon(FCM_ICON)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent)
+                    .setPriority(Notification.PRIORITY_DEFAULT)
+            } else {
+                notificationBuilder =  NotificationCompat.Builder(applicationContext)
                     .setLargeIcon(image) /*Notification icon image*/
                     .setSmallIcon(FCM_ICON)
                     .setContentTitle(title)
@@ -271,6 +282,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     .setSound(defaultSoundUri)
                     .setContentIntent(pendingIntent)
                     .setPriority(Notification.PRIORITY_DEFAULT)
+            }
             val notificationManager =
                 getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
