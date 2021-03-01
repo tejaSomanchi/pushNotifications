@@ -686,6 +686,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     Log.d(TAG, "fetchNotifications error: "+it.message)
                 })
         } catch (e: Exception) {
+            Log.d(TAG, "fetchNotifications: catch "+e.printStackTrace())
             e.printStackTrace()
         }
 
@@ -995,7 +996,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "checkForInAppNotifications: \$e")
+            Log.e(TAG, "checkForInAppNotifications: $e")
 //                Dont push
         }
     }
