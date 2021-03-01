@@ -11,6 +11,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.Html
 import android.util.Log
 import android.view.View
@@ -32,13 +33,11 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.Retrofit
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationButtonListener {
@@ -203,7 +202,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                                         renderOneBezelNotification(this, extras)
                                     }
                                     else -> {
-                                        sendNotification(extras)
+                                        sendNotification(this, extras)
                                     }
                                 }
                             } else {
@@ -231,7 +230,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                         }
                         else -> {
                             Log.d(TAG, "onMessageReceived: in else part")
-                            sendNotification(extras)
+                            sendNotification(this, extras)
                         }
                     }
                 }
@@ -242,7 +241,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     }
 
 
-    private fun sendNotification(extras: Bundle) {
+    private fun sendNotification(context: Context, extras: Bundle) {
         try {
             var message = extras.getString("message")
             var image = getBitmapfromUrl(extras.getString("image"))
@@ -258,14 +257,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             Log.i("Result", "Got the data yessss")
             val rand = Random()
             val a = rand.nextInt(101) + 1
-            val intent = Intent(applicationContext, FCM_TARGET_ACTIVITY)
+            val intent = Intent(context.applicationContext, FCM_TARGET_ACTIVITY)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra("link", url)
             intent.putExtras(extras);
             intent.action = java.lang.Long.toString(System.currentTimeMillis())
             val pendingIntent = PendingIntent.getActivity(
-                applicationContext,
+                context.applicationContext,
                 0 /* Request code */,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
@@ -273,7 +272,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             var notificationBuilder: NotificationCompat.Builder;
             if(image == null || image.equals("")){
-                notificationBuilder =  NotificationCompat.Builder(applicationContext)
+                notificationBuilder =  NotificationCompat.Builder(context.applicationContext)
                     .setLargeIcon(image) /*Notification icon image*/
                     .setSmallIcon(FCM_ICON)
                     .setContentTitle(title)
@@ -283,7 +282,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     .setContentIntent(pendingIntent)
                     .setPriority(Notification.PRIORITY_DEFAULT)
             } else {
-                notificationBuilder =  NotificationCompat.Builder(applicationContext)
+                notificationBuilder =  NotificationCompat.Builder(context.applicationContext)
                     .setLargeIcon(image) /*Notification icon image*/
                     .setSmallIcon(FCM_ICON)
                     .setContentTitle(title)
@@ -298,7 +297,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     .setPriority(Notification.PRIORITY_DEFAULT)
             }
             val notificationManager =
-                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 // The id of the channel.
                 val id = "messenger_general"
@@ -357,7 +356,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             contentViewSmall!!.setImageViewBitmap(R.id.large_icon, bitmapImage)
 
 
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             val id = "messenger_general"
             val name = "General"
             val description = "General Notifications sent by the app"
@@ -516,7 +515,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 //
 //            setCustomContentViewDotSep(contentViewBig);
 //            setCustomContentViewDotSep(contentViewSmall);
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             val id = "messenger_general"
             val name = "General"
             val description = "General Notifications sent by the app"
@@ -608,7 +607,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 //
 //            setCustomContentViewDotSep(contentViewBig);
 //            setCustomContentViewDotSep(contentViewSmall);
-            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             val id = "messenger_general"
             val name = "General"
             val description = "General Notifications sent by the app"
@@ -658,88 +657,102 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
      *To get a Bitmap image from the URL received
      * */
     fun getBitmapfromUrl(imageUrl: String?): Bitmap? {
-        return try {
+        try {
             val url = URL(imageUrl)
             val connection = url.openConnection() as HttpURLConnection
             connection.doInput = true
             connection.connect()
             val input = connection.inputStream
-            BitmapFactory.decodeStream(input)
+            val bitmap = BitmapFactory.decodeStream(input)
+            return bitmap
         } catch (e: Exception) {
             Log.d(TAG, "getBitmapfromUrl: $e")
-            null
+            return null
         }
     }
 
 
-    fun fetchNotifications() {
+    fun fetchNotifications(context: Context) {
         try {
-            Log.d(TAG, "fetchNotifications: called")
+            Log.d(TAG, "fetchNotifications: called " + context.packageName)
             retrofit = APIClient.getClient()
             apiInterface = retrofit?.create(APIInterface::class.java)
+            getAppName(context)
             notificationListObservable = apiInterface?.getNotifications(appName)
-            notificationListObservable?.subscribeOn(Schedulers.newThread())!!.observeOn(AndroidSchedulers.mainThread())?.subscribe(
+            notificationListObservable?.subscribeOn(Schedulers.newThread())!!.observeOn(
+                AndroidSchedulers.mainThread()
+            )?.subscribe(
                 {
-                    setNotificationData(it)
+                    setNotificationData(it, context)
                 },
                 {
-                    Log.d(TAG, "fetchNotifications error: "+it.message)
+                    Log.d(TAG, "fetchNotifications error: " + it.message)
                 })
         } catch (e: Exception) {
-            Log.d(TAG, "fetchNotifications: catch message "+e.message)
-            Log.d(TAG, "fetchNotifications: catch "+e.printStackTrace())
+            Log.d(TAG, "fetchNotifications: catch message " + e.message)
             e.printStackTrace()
         }
 
     }
 
-    fun setNotificationData(notificationList: ArrayList<NotificationPayloadModel>){
-        Log.d(TAG, "setNotificationData: called")
-        for(notificationObject : NotificationPayloadModel in notificationList){
-            val extras = Bundle()
-            extras.putString("notificationType",notificationObject.notificationType)
-            extras.putString("title",notificationObject.title)
-            extras.putString("message",notificationObject.message)
-            extras.putString("messageBody",notificationObject.messageBody)
-            extras.putString("which",notificationObject.which)
-            extras.putString("link",notificationObject.link)
-            extras.putString("image",notificationObject.image)
-            packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA).apply {
-                // setting the small icon for notification
-                if(metaData.containsKey("FCM_ICON")){
-                    Log.d(TAG, "onMessageReceived: " + metaData.get("FCM_ICON"))
-                    FCM_ICON = metaData.getInt("FCM_ICON")
+    fun setNotificationData(notificationList: ArrayList<NotificationPayloadModel>, context: Context){
+        try {
+            Log.d(TAG, "setNotificationData: called")
+            for (notificationObject: NotificationPayloadModel in notificationList) {
+                val extras = Bundle()
+                extras.putString("notificationType", notificationObject.notificationType)
+                extras.putString("title", notificationObject.title)
+                extras.putString("message", notificationObject.message)
+                extras.putString("messageBody", notificationObject.messageBody)
+                extras.putString("which", notificationObject.which)
+                extras.putString("link", notificationObject.link)
+                extras.putString("image", notificationObject.image)
+                context.packageManager.getApplicationInfo(
+                    context.packageName,
+                    PackageManager.GET_META_DATA
+                ).apply {
+                    // setting the small icon for notification
+                    if (metaData.containsKey("FCM_ICON")) {
+                        Log.d(TAG, "FCM_ICON: " + metaData.get("FCM_ICON"))
+                        FCM_ICON = metaData.getInt("FCM_ICON")
+                    }
+                    //getting and setting the target activity that is to be opened on notification click
+                    if (extras.containsKey("target_activity")) {
+                        FCM_TARGET_ACTIVITY = Class.forName(
+                            extras.getString(
+                                "target_activity",
+                                ""
+                            )
+                        ) as Class<out Activity?>?
+                    } else if (FCM_TARGET_ACTIVITY == null) {
+                        FCM_TARGET_ACTIVITY = Class.forName(
+                            metaData.get("FCM_TARGET_ACTIVITY").toString()
+                        ) as Class<out Activity?>?
+                    }
                 }
-                //getting and setting the target activity that is to be opened on notification click
-                if(extras.containsKey("target_activity")){
-                    FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity", "")) as Class<out Activity?>?
-                }
-                else if(FCM_TARGET_ACTIVITY == null) {
-                    FCM_TARGET_ACTIVITY = Class.forName(
-                        metaData.get("FCM_TARGET_ACTIVITY").toString()
-                    ) as Class<out Activity?>?
+                setUp(context, extras)
+                when (notificationObject.notificationType) {
+                    "R" -> {
+                        setUp(context, extras)
+                        renderRatingNotification(context, extras)
+                    }
+                    "Z" -> {
+                        setUp(context, extras)
+                        renderZeroBezelNotification(context, extras)
+                    }
+                    "O" -> {
+                        setUp(context, extras)
+                        renderOneBezelNotification(context, extras)
+                    }
+                    else -> {
+                        Log.d(TAG, "onMessageReceived: in else part")
+                        sendNotification(context, extras)
+                    }
                 }
             }
-            setUp(this, extras)
-            when (notificationObject.notificationType) {
-                "R" -> {
-                    setUp(this, extras)
-                    renderRatingNotification(this, extras)
-                }
-                "Z" -> {
-                    setUp(this, extras)
-                    renderZeroBezelNotification(this, extras)
-                }
-                "O" -> {
-                    setUp(this, extras)
-                    renderOneBezelNotification(this, extras)
-                }
-                else -> {
-                    Log.d(TAG, "onMessageReceived: in else part")
-                    sendNotification(extras)
-                }
-            }
-
+        } catch (e: Exception){
+            Log.d(TAG, "setNotificationData: catch " + e.message)
+            e.printStackTrace()
         }
     }
 
@@ -753,7 +766,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     {
         try {
             if(!intent.hasExtra("rating") && !intent.hasExtra("which")){
-                fetchNotifications()
+                fetchNotifications(context)
             }
             val rating: Int = intent.getIntExtra("rating", 0)
             Log.i("Result", "Got the data " + intent.getIntExtra("rating", 0))

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class NotificationPayloadModel(
     @SerializedName("notificationType")
     @Expose
-    var notificationType: String? = null,
+    var notificationType: String? = "",
 
     @SerializedName("title")
     @Expose

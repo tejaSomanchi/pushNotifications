@@ -19,25 +19,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <service-->
-<!--            android:name="com.appyhigh.pushNotifications.MyFirebaseMessagingService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <service
+            android:name="com.appyhigh.pushNotifications.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
-<!--        <receiver-->
-<!--            android:name="com.appyhigh.pushNotifications.PushTemplateReceiver"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="false" />-->
+        <receiver
+            android:name="com.appyhigh.pushNotifications.PushTemplateReceiver"
+            android:enabled="true"
+            android:exported="false" />
 
-<!--        <meta-data-->
-<!--            android:name="FCM_TARGET_ACTIVITY"-->
-<!--            android:value="com.appyhigh.shareme.activity.MainActivity" />-->
-<!--        <meta-data-->
-<!--            android:name="FCM_ICON"-->
-<!--            android:resource="@mipmap/ic_launcher" />-->
+        <meta-data
+            android:name="FCM_TARGET_ACTIVITY"
+            android:value="com.appyhigh.appyhighutils.MainActivity" />
+        <meta-data
+            android:name="FCM_ICON"
+            android:resource="@mipmap/ic_launcher" />
     </application>
 
 </manifest>
