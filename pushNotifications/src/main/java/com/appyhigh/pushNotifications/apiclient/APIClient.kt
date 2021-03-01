@@ -1,5 +1,6 @@
 package com.appyhigh.pushNotifications.apiclient
 
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -22,6 +23,7 @@ class APIClient {
             val BASE_URL = "http://192.168.1.8:5000/"
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
