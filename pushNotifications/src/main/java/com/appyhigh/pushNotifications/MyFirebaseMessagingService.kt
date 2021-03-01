@@ -686,6 +686,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     Log.d(TAG, "fetchNotifications error: "+it.message)
                 })
         } catch (e: Exception) {
+            Log.d(TAG, "fetchNotifications: catch message "+e.message)
             Log.d(TAG, "fetchNotifications: catch "+e.printStackTrace())
             e.printStackTrace()
         }
