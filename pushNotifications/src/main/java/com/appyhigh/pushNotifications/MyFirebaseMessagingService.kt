@@ -19,6 +19,9 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.appyhigh.pushNotifications.Constants.FCM_ICON
 import com.appyhigh.pushNotifications.Constants.FCM_TARGET_ACTIVITY
+import com.appyhigh.pushNotifications.apiclient.APIClient
+import com.appyhigh.pushNotifications.apiclient.APIInterface
+import com.appyhigh.pushNotifications.models.NotificationPayloadModel
 import com.clevertap.android.sdk.CleverTapAPI
 import com.clevertap.android.sdk.InAppNotificationButtonListener
 import com.google.android.play.core.review.ReviewInfo
@@ -27,9 +30,15 @@ import com.google.android.play.core.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.Consumer
+import io.reactivex.rxjava3.schedulers.Schedulers
+import retrofit2.Retrofit
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationButtonListener {
@@ -56,7 +65,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     private var inAppActivityToOpen: Class<out Activity?>? = null
     private lateinit var inAppIntentParam: String
     private lateinit var appName: String
-
+    private var retrofit: Retrofit? = null
+    private var apiInterface: APIInterface? = null
+    private var notificationListObservable : Observable<ArrayList<NotificationPayloadModel>>? = null
 
     fun addTopics(context: Context, appName: String, isDebug: Boolean){
         if(appName.equals("")){
@@ -660,6 +671,74 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
         }
     }
 
+
+    fun fetchNotifications() {
+        retrofit = APIClient.getClient()
+        apiInterface = retrofit?.create(APIInterface::class.java)
+        notificationListObservable = apiInterface?.getNotifications(appName)
+        notificationListObservable?.subscribeOn(Schedulers.newThread())!!.observeOn(AndroidSchedulers.mainThread())?.subscribe({
+            setNotificationData(it)
+        },{
+
+        })
+
+        try {
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    fun setNotificationData(notificationList: ArrayList<NotificationPayloadModel>){
+        for(notificationObject : NotificationPayloadModel in notificationList){
+            val extras = Bundle()
+            extras.putString("notificationType",notificationObject.notificationType)
+            extras.putString("title",notificationObject.title)
+            extras.putString("message",notificationObject.message)
+            extras.putString("messageBody",notificationObject.messageBody)
+            extras.putString("which",notificationObject.which)
+            extras.putString("link",notificationObject.link)
+            extras.putString("image",notificationObject.image)
+            packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA).apply {
+                // setting the small icon for notification
+                if(metaData.containsKey("FCM_ICON")){
+                    Log.d(TAG, "onMessageReceived: " + metaData.get("FCM_ICON"))
+                    FCM_ICON = metaData.getInt("FCM_ICON")
+                }
+                //getting and setting the target activity that is to be opened on notification click
+                if(extras.containsKey("target_activity")){
+                    FCM_TARGET_ACTIVITY = Class.forName(extras.getString("target_activity", "")) as Class<out Activity?>?
+                }
+                else if(FCM_TARGET_ACTIVITY == null) {
+                    FCM_TARGET_ACTIVITY = Class.forName(
+                        metaData.get("FCM_TARGET_ACTIVITY").toString()
+                    ) as Class<out Activity?>?
+                }
+            }
+            setUp(this, extras)
+            when (notificationObject.notificationType) {
+                "R" -> {
+                    setUp(this, extras)
+                    renderRatingNotification(this, extras)
+                }
+                "Z" -> {
+                    setUp(this, extras)
+                    renderZeroBezelNotification(this, extras)
+                }
+                "O" -> {
+                    setUp(this, extras)
+                    renderOneBezelNotification(this, extras)
+                }
+                else -> {
+                    Log.d(TAG, "onMessageReceived: in else part")
+                    sendNotification(extras)
+                }
+            }
+
+        }
+    }
+
     fun checkForNotifications(
         context: Context,
         intent: Intent,
@@ -669,6 +748,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     )
     {
         try {
+            if(!intent.hasExtra("rating") && !intent.hasExtra("which")){
+                fetchNotifications()
+            }
             val rating: Int = intent.getIntExtra("rating", 0)
             Log.i("Result", "Got the data " + intent.getIntExtra("rating", 0))
             var showWhich = true

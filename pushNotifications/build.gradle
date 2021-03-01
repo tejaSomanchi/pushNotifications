@@ -35,10 +35,17 @@ dependencies {
 
     //add for clevertap
     implementation 'com.clevertap.android:clevertap-android-sdk:3.9.1'
-    implementation 'com.google.firebase:firebase-messaging:20.1.6'
-    implementation 'com.android.installreferrer:installreferrer:1.0'
+    implementation 'com.google.firebase:firebase-messaging:21.0.1'
+    implementation 'com.android.installreferrer:installreferrer:2.2'
 
     //add for in-app review
-    implementation 'com.google.android.play:core:1.8.0'
+    implementation 'com.google.android.play:core:1.9.1'
+
+    //for retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
 
 }
