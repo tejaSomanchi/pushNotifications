@@ -673,17 +673,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
 
     fun fetchNotifications() {
-        retrofit = APIClient.getClient()
-        apiInterface = retrofit?.create(APIInterface::class.java)
-        notificationListObservable = apiInterface?.getNotifications(appName)
-        notificationListObservable?.subscribeOn(Schedulers.newThread())!!.observeOn(AndroidSchedulers.mainThread())?.subscribe({
-            setNotificationData(it)
-        },{
-
-        })
-
         try {
-
+            Log.d(TAG, "fetchNotifications: called")
+            retrofit = APIClient.getClient()
+            apiInterface = retrofit?.create(APIInterface::class.java)
+            notificationListObservable = apiInterface?.getNotifications(appName)
+            notificationListObservable?.subscribeOn(Schedulers.newThread())!!.observeOn(AndroidSchedulers.mainThread())?.subscribe(
+                {
+                    setNotificationData(it)
+                },
+                {
+                    Log.d(TAG, "fetchNotifications error: "+it.message)
+                })
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -691,6 +692,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     }
 
     fun setNotificationData(notificationList: ArrayList<NotificationPayloadModel>){
+        Log.d(TAG, "setNotificationData: called")
         for(notificationObject : NotificationPayloadModel in notificationList){
             val extras = Bundle()
             extras.putString("notificationType",notificationObject.notificationType)
