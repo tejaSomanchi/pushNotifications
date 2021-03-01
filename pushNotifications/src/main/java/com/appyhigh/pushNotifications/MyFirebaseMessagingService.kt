@@ -11,7 +11,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.text.Html
 import android.util.Log
 import android.view.View
@@ -23,6 +22,12 @@ import com.appyhigh.pushNotifications.Constants.FCM_TARGET_ACTIVITY
 import com.appyhigh.pushNotifications.apiclient.APIClient
 import com.appyhigh.pushNotifications.apiclient.APIInterface
 import com.appyhigh.pushNotifications.models.NotificationPayloadModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.Target
 import com.clevertap.android.sdk.CleverTapAPI
 import com.clevertap.android.sdk.InAppNotificationButtonListener
 import com.google.android.play.core.review.ReviewInfo
@@ -657,17 +662,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
      *To get a Bitmap image from the URL received
      * */
     fun getBitmapfromUrl(imageUrl: String?): Bitmap? {
+        var bitmap:Bitmap? = null
         try {
-            val url = URL(imageUrl)
-            val connection = url.openConnection() as HttpURLConnection
-            connection.doInput = true
-            connection.connect()
-            val input = connection.inputStream
-            val bitmap = BitmapFactory.decodeStream(input)
+            val t:Thread = Thread{
+                val url = URL(imageUrl)
+                val connection = url.openConnection() as HttpURLConnection
+                connection.doInput = true
+                connection.connect()
+                val input = connection.inputStream
+                bitmap = BitmapFactory.decodeStream(input)
+            }
+            t.start()
+            t.join()
             return bitmap
         } catch (e: Exception) {
             Log.d(TAG, "getBitmapfromUrl: $e")
-            return null
+            return bitmap
         }
     }
 
