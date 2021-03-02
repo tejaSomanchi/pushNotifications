@@ -8,8 +8,8 @@ import retrofit2.http.Query
 
 interface APIInterface {
 
-    @GET("getNotifications?")
+    @GET("notifications/?")
     fun getNotifications(
-        @Query("packageName") packageName: String?
+        @Query("package_id") packageName: String?
     ): Observable<ArrayList<NotificationPayloadModel>>
 }

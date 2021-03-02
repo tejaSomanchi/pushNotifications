@@ -825,7 +825,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
             if (intent.hasExtra("which") && showWhich) {
                 val which = intent.getStringExtra("which")
-                val url = intent.getStringExtra("link")
+                var url = ""
+                if(intent.hasExtra("link")){
+                    url = intent.getStringExtra("link")!!
+                } else if(intent.hasExtra("url")) {
+                    url = intent.getStringExtra("url")!!
+                }
                 val extras : Bundle? = intent.extras;
                 when (which) {
                     "B" -> {
