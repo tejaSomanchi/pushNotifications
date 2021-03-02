@@ -1,4 +1,5 @@
 package com.appyhigh.pushNotifications
+
 import android.app.*
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -22,12 +23,6 @@ import com.appyhigh.pushNotifications.Constants.FCM_TARGET_ACTIVITY
 import com.appyhigh.pushNotifications.apiclient.APIClient
 import com.appyhigh.pushNotifications.apiclient.APIInterface
 import com.appyhigh.pushNotifications.models.NotificationPayloadModel
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.target.Target
 import com.clevertap.android.sdk.CleverTapAPI
 import com.clevertap.android.sdk.InAppNotificationButtonListener
 import com.google.android.play.core.review.ReviewInfo
@@ -39,6 +34,8 @@ import com.google.firebase.messaging.RemoteMessage
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Retrofit
 import java.net.HttpURLConnection
 import java.net.URL
@@ -168,7 +165,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     extras.putString(key, value)
                 }
                 val notificationType = extras.getString("notificationType")
-
+                val sharedPreferences = getSharedPreferences("missedNotifications", MODE_PRIVATE)
+                sharedPreferences.edit().putString(extras.getString("link","default"),extras.toString()).apply()
                 packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA).apply {
                     // setting the small icon for notification
                     if(metaData.containsKey("FCM_ICON")){
@@ -688,7 +686,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
             retrofit = APIClient.getClient()
             apiInterface = retrofit?.create(APIInterface::class.java)
             getAppName(context)
-            notificationListObservable = apiInterface?.getNotifications(appName)
+            notificationListObservable = apiInterface?.getNotifications(context.packageName)
             notificationListObservable?.subscribeOn(Schedulers.newThread())!!.observeOn(
                 AndroidSchedulers.mainThread()
             )?.subscribe(
@@ -708,15 +706,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
     fun setNotificationData(notificationList: ArrayList<NotificationPayloadModel>, context: Context){
         try {
             Log.d(TAG, "setNotificationData: called")
+            val sharedPreferences = context.getSharedPreferences("missedNotifications", MODE_PRIVATE)
             for (notificationObject: NotificationPayloadModel in notificationList) {
-                val extras = Bundle()
-                extras.putString("notificationType", notificationObject.notificationType)
-                extras.putString("title", notificationObject.title)
-                extras.putString("message", notificationObject.message)
-                extras.putString("messageBody", notificationObject.messageBody)
-                extras.putString("which", notificationObject.which)
-                extras.putString("link", notificationObject.link)
-                extras.putString("image", notificationObject.image)
+                if(sharedPreferences.contains(notificationObject.id)){
+                    continue
+                }
+                val extras = jsonToBundle(JSONObject(notificationObject.data))
                 context.packageManager.getApplicationInfo(
                     context.packageName,
                     PackageManager.GET_META_DATA
@@ -741,7 +736,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                     }
                 }
                 setUp(context, extras)
-                when (notificationObject.notificationType) {
+                when (extras.getString("notificationType","")) {
                     "R" -> {
                         setUp(context, extras)
                         renderRatingNotification(context, extras)
@@ -759,11 +754,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                         sendNotification(context, extras)
                     }
                 }
+                sharedPreferences.edit().putString(notificationObject.id,notificationObject.data).apply()
             }
         } catch (e: Exception){
             Log.d(TAG, "setNotificationData: catch " + e.message)
             e.printStackTrace()
         }
+    }
+
+    fun jsonToBundle(jsonObject: JSONObject): Bundle {
+        val bundle = Bundle()
+        val iter: Iterator<*> = jsonObject.keys()
+        while (iter.hasNext()) {
+            val key = iter.next() as String
+            val value = jsonObject.getString(key)
+            bundle.putString(key, value)
+        }
+        return bundle
     }
 
     fun checkForNotifications(

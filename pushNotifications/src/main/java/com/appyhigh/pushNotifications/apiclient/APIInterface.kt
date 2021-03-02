@@ -10,6 +10,6 @@ interface APIInterface {
 
     @GET("getNotifications?")
     fun getNotifications(
-        @Query("topic") topic: String?
+        @Query("packageName") packageName: String?
     ): Observable<ArrayList<NotificationPayloadModel>>
 }
