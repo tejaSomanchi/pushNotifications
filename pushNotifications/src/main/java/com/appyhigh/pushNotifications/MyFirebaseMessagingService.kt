@@ -273,52 +273,53 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
             )
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-            var notificationBuilder: NotificationCompat.Builder;
-            if(image == null || image.equals("")){
-                notificationBuilder =  NotificationCompat.Builder(context.applicationContext)
-                    .setLargeIcon(image) /*Notification icon image*/
-                    .setSmallIcon(FCM_ICON)
-                    .setContentTitle(title)
-                    .setContentText(message)
-                    .setAutoCancel(true)
-                    .setSound(defaultSoundUri)
-                    .setContentIntent(pendingIntent)
-                    .setPriority(Notification.PRIORITY_DEFAULT)
-            } else {
-                notificationBuilder =  NotificationCompat.Builder(context.applicationContext)
-                    .setLargeIcon(image) /*Notification icon image*/
-                    .setSmallIcon(FCM_ICON)
-                    .setContentTitle(title)
-                    .setContentText(message)
-                    .setStyle(
-                        NotificationCompat.BigPictureStyle()
-                            .bigPicture(image)
-                    ) /*Notification with Image*/
-                    .setAutoCancel(true)
-                    .setSound(defaultSoundUri)
-                    .setContentIntent(pendingIntent)
-                    .setPriority(Notification.PRIORITY_DEFAULT)
-            }
-            val notificationManager =
-                context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                // The id of the channel.
-                val id = "messenger_general"
-                val name: CharSequence = "General"
-                val description = "General Notifications sent by the app"
-                val importance = NotificationManager.IMPORTANCE_HIGH
-                val mChannel = NotificationChannel(id, name, importance)
-                mChannel.description = description
-                mChannel.enableLights(true)
-                mChannel.lightColor = Color.BLUE
-                mChannel.enableVibration(true)
-                notificationManager.createNotificationChannel(mChannel)
-                notificationManager.notify(a + 1, notificationBuilder.setChannelId(id).build())
-            } else {
-                notificationManager.notify(
-                    a + 1 /* ID of notification */,
-                    notificationBuilder.build()
-                )
+            if(title!=null && message!=null) {
+                var notificationBuilder: NotificationCompat.Builder;
+                if (image == null || image.equals("")) {
+                    notificationBuilder = NotificationCompat.Builder(context.applicationContext)
+                        .setSmallIcon(FCM_ICON)
+                        .setContentTitle(title)
+                        .setContentText(message)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent)
+                        .setPriority(Notification.PRIORITY_DEFAULT)
+                } else {
+                    notificationBuilder = NotificationCompat.Builder(context.applicationContext)
+                        .setLargeIcon(image) /*Notification icon image*/
+                        .setSmallIcon(FCM_ICON)
+                        .setContentTitle(title)
+                        .setContentText(message)
+                        .setStyle(
+                            NotificationCompat.BigPictureStyle()
+                                .bigPicture(image)
+                        ) /*Notification with Image*/
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent)
+                        .setPriority(Notification.PRIORITY_DEFAULT)
+                }
+                val notificationManager =
+                    context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // The id of the channel.
+                    val id = "messenger_general"
+                    val name: CharSequence = "General"
+                    val description = "General Notifications sent by the app"
+                    val importance = NotificationManager.IMPORTANCE_HIGH
+                    val mChannel = NotificationChannel(id, name, importance)
+                    mChannel.description = description
+                    mChannel.enableLights(true)
+                    mChannel.lightColor = Color.BLUE
+                    mChannel.enableVibration(true)
+                    notificationManager.createNotificationChannel(mChannel)
+                    notificationManager.notify(a + 1, notificationBuilder.setChannelId(id).build())
+                } else {
+                    notificationManager.notify(
+                        a + 1 /* ID of notification */,
+                        notificationBuilder.build()
+                    )
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
