@@ -681,7 +681,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
      * */
     fun getBitmapfromUrl(imageUrl: String?): Bitmap? {
         var bitmap:Bitmap? = null
-        if(image == null || image.equals("") || isValidUrl(imageUrl)){
+        if(image == null || image.equals("") || !isValidUrl(imageUrl)){
             return bitmap;
         }
         try {
