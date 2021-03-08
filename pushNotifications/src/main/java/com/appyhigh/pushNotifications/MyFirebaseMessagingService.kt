@@ -354,9 +354,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
 //            setCustomContentViewBigImage(contentViewRating, image);
             bitmapImage = getBitmapfromUrl(image)
-            contentViewRating!!.setImageViewBitmap(R.id.big_image, bitmapImage)
-            //            setCustomContentViewLargeIcon(contentViewSmall, large_icon);
-            contentViewSmall!!.setImageViewBitmap(R.id.large_icon, bitmapImage)
+            if(bitmapImage!=null) {
+                contentViewRating!!.setImageViewBitmap(R.id.big_image, bitmapImage)
+                //            setCustomContentViewLargeIcon(contentViewSmall, large_icon);
+                contentViewSmall!!.setImageViewBitmap(R.id.large_icon, bitmapImage)
+            }
 
 
             val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -503,9 +505,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
             )
             bitmapImage = getBitmapfromUrl(image)
-            contentViewBig!!.setImageViewBitmap(R.id.big_image, bitmapImage)
+            if(bitmapImage!=null) {
+                contentViewBig!!.setImageViewBitmap(R.id.big_image, bitmapImage)
 
-            contentViewSmall!!.setImageViewBitmap(R.id.big_image, bitmapImage)
+                contentViewSmall!!.setImageViewBitmap(R.id.big_image, bitmapImage)
+            }
 
             contentViewSmall!!.setImageViewResource(
                 R.id.small_icon,
@@ -595,8 +599,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
             )
             bitmapImage = getBitmapfromUrl(image)
-            contentViewBig!!.setImageViewBitmap(R.id.big_image, bitmapImage)
-            contentViewSmall!!.setImageViewBitmap(R.id.large_icon, bitmapImage)
+            if(bitmapImage!=null) {
+                contentViewBig!!.setImageViewBitmap(R.id.big_image, bitmapImage)
+                contentViewSmall!!.setImageViewBitmap(R.id.large_icon, bitmapImage)
+            }
 
 
             contentViewSmall!!.setImageViewResource(
@@ -661,6 +667,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
      * */
     fun getBitmapfromUrl(imageUrl: String?): Bitmap? {
         var bitmap:Bitmap? = null
+        if(image == null || image.equals("")){
+            return bitmap;
+        }
         try {
             val t:Thread = Thread{
                 val url = URL(imageUrl)
