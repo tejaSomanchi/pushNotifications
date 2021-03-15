@@ -686,29 +686,30 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
      * */
     fun getBitmapfromUrl(imageUrl: String?, context: Context): Bitmap? {
         var bitmap:Bitmap? = null
-        if(image == null || image.equals("") || !isValidUrl(imageUrl)){
-            return bitmap
-        }
-        try {
-            val t:Thread = Thread{
-                try {
-                    val url = URL(imageUrl)
-                    val connection = url.openConnection() as HttpURLConnection
-                    connection.doInput = true
-                    connection.connect()
-                    val input = connection.inputStream
-                    bitmap = BitmapFactory.decodeStream(input)
-                } catch (e: Exception) {
-                    Log.d(TAG, "getBitmapfromUrl inside: $e")
-                }
-            }
-            t.start()
-            t.join()
-            return bitmap
-        } catch (e: Exception) {
-            Log.d(TAG, "getBitmapfromUrl: $e")
-            return bitmap
-        }
+//        if(image == null || image.equals("") || !isValidUrl(imageUrl)){
+//            return bitmap
+//        }
+//        try {
+//            val t:Thread = Thread{
+//                try {
+//                    val url = URL(imageUrl)
+//                    val connection = url.openConnection() as HttpURLConnection
+//                    connection.doInput = true
+//                    connection.connect()
+//                    val input = connection.inputStream
+//                    bitmap = BitmapFactory.decodeStream(input)
+//                } catch (e: Exception) {
+//                    Log.d(TAG, "getBitmapfromUrl inside: $e")
+//                }
+//            }
+//            t.start()
+//            t.join()
+//            return bitmap
+//        } catch (e: Exception) {
+//            Log.d(TAG, "getBitmapfromUrl: $e")
+//            return bitmap
+//        }
+        return bitmap
     }
 
 
