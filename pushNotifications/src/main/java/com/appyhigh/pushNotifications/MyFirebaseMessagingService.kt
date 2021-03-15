@@ -765,7 +765,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                         }
                     }
                     setUp(context, extras)
-                    Handler(Looper.getMainLooper()).post{
+                    Handler(Looper.getMainLooper()).postDelayed({
                         when (extras.getString("notificationType", "")) {
                             "R" -> {
                                 setUp(context, extras)
@@ -784,7 +784,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
                                 generatePictureStyleNotification(context, extras).execute()
                             }
                         }
-                    }
+                    }, 1000)
                     sharedPreferences.edit().putString(
                         notificationObject.id,
                         notificationObject.data
