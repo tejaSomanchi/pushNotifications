@@ -13,6 +13,8 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Html
 import android.util.Log
 import android.util.Patterns
@@ -742,60 +744,64 @@ class MyFirebaseMessagingService : FirebaseMessagingService(),InAppNotificationB
 
     fun setNotificationData(notificationList: ArrayList<NotificationPayloadModel>, context: Context){
         try {
-            Log.d(TAG, "setNotificationData: called")
-            val sharedPreferences = context.getSharedPreferences(
-                "missedNotifications",
-                MODE_PRIVATE
-            )
-            for (notificationObject: NotificationPayloadModel in notificationList) {
-                if(sharedPreferences.contains(notificationObject.id)){
-                    continue
+            Thread{
+                Log.d(TAG, "setNotificationData: called")
+                val sharedPreferences = context.getSharedPreferences(
+                    "missedNotifications",
+                    MODE_PRIVATE
+                )
+                for (notificationObject: NotificationPayloadModel in notificationList) {
+                    if(sharedPreferences.contains(notificationObject.id)){
+                        continue
+                    }
+                    val extras = jsonToBundle(JSONObject(notificationObject.data))
+                    context.packageManager.getApplicationInfo(
+                        context.packageName,
+                        PackageManager.GET_META_DATA
+                    ).apply {
+                        // setting the small icon for notification
+                        if (metaData.containsKey("FCM_ICON")) {
+                            Log.d(TAG, "FCM_ICON: " + metaData.get("FCM_ICON"))
+                            FCM_ICON = metaData.getInt("FCM_ICON")
+                        }
+                        //getting and setting the target activity that is to be opened on notification click
+                        if (extras.containsKey("target_activity")) {
+                            FCM_TARGET_ACTIVITY = Class.forName(
+                                extras.getString(
+                                    "target_activity",
+                                    ""
+                                )
+                            ) as Class<out Activity?>?
+                        } else if (FCM_TARGET_ACTIVITY == null) {
+                            FCM_TARGET_ACTIVITY = Class.forName(
+                                metaData.get("FCM_TARGET_ACTIVITY").toString()
+                            ) as Class<out Activity?>?
+                        }
+                    }
+                    setUp(context, extras)
+                    Handler(Looper.getMainLooper()).post{
+                        when (extras.getString("notificationType", "")) {
+                            "R" -> {
+                                setUp(context, extras)
+                                renderRatingNotification(context, extras)
+                            }
+                            "Z" -> {
+                                setUp(context, extras)
+                                renderZeroBezelNotification(context, extras)
+                            }
+                            "O" -> {
+                                setUp(context, extras)
+                                renderOneBezelNotification(context, extras)
+                            }
+                            else -> {
+                                Log.d(TAG, "onMessageReceived: in else part")
+                                sendNotification(context, extras)
+                            }
+                        }
+                    }
+                    sharedPreferences.edit().putString(notificationObject.id, notificationObject.data).apply()
                 }
-                val extras = jsonToBundle(JSONObject(notificationObject.data))
-                context.packageManager.getApplicationInfo(
-                    context.packageName,
-                    PackageManager.GET_META_DATA
-                ).apply {
-                    // setting the small icon for notification
-                    if (metaData.containsKey("FCM_ICON")) {
-                        Log.d(TAG, "FCM_ICON: " + metaData.get("FCM_ICON"))
-                        FCM_ICON = metaData.getInt("FCM_ICON")
-                    }
-                    //getting and setting the target activity that is to be opened on notification click
-                    if (extras.containsKey("target_activity")) {
-                        FCM_TARGET_ACTIVITY = Class.forName(
-                            extras.getString(
-                                "target_activity",
-                                ""
-                            )
-                        ) as Class<out Activity?>?
-                    } else if (FCM_TARGET_ACTIVITY == null) {
-                        FCM_TARGET_ACTIVITY = Class.forName(
-                            metaData.get("FCM_TARGET_ACTIVITY").toString()
-                        ) as Class<out Activity?>?
-                    }
-                }
-                setUp(context, extras)
-                when (extras.getString("notificationType", "")) {
-                    "R" -> {
-                        setUp(context, extras)
-                        renderRatingNotification(context, extras)
-                    }
-                    "Z" -> {
-                        setUp(context, extras)
-                        renderZeroBezelNotification(context, extras)
-                    }
-                    "O" -> {
-                        setUp(context, extras)
-                        renderOneBezelNotification(context, extras)
-                    }
-                    else -> {
-                        Log.d(TAG, "onMessageReceived: in else part")
-                        sendNotification(context, extras)
-                    }
-                }
-                sharedPreferences.edit().putString(notificationObject.id, notificationObject.data).apply()
-            }
+            }.start()
         } catch (e: Exception){
             Log.d(TAG, "setNotificationData: catch " + e.message)
             e.printStackTrace()
